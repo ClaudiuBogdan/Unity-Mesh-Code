@@ -13,7 +13,7 @@ public class MeshGenerator : MonoBehaviour
     // Use this for initialization
     void Start() { 
         GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken();
-        StartCoroutine(changeSide());
+        //StartCoroutine(changeSide());
     }
 	
 	// Update is called once per frame
@@ -37,14 +37,12 @@ public class MeshGenerator : MonoBehaviour
         Vector3[] firstHexagon;
         Vector3[] secondHexagon;
 
-        firstHexagon = new Vector3[3];
-
         Vector3 centerHexagon = new Vector3(0, 0, 0);
         Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
         Vector3 rotationalVectorHexagon = new Vector3(0, 0, 2);
         firstHexagon = generateHexInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
 
-        Vector3 centerHexagon2 = new Vector3(0, 2, 0);
+        Vector3 centerHexagon2 = new Vector3(0, 10, 0);
         Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
         Vector3 rotationalVectorHexagon2 = new Vector3(0, 0, 2);
         secondHexagon = generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
@@ -86,19 +84,23 @@ public class MeshGenerator : MonoBehaviour
 
         for (int i = 0; i < generatedHexMeshes.Length; i++)
         {
+            Debug.Log("Triangle length: " + generatedHexMeshes[i].triangles.Length);
             foreach (int triangle in generatedHexMeshes[i].triangles)
             {
-                trianglesArray.Add(triangle * (i + 1));
+                trianglesArray.Add(triangle + (i * 4));
+                Debug.Log(triangle + (i * 4));
             }
 
             foreach (Vector3 vertex in generatedHexMeshes[i].vertices)
             {
                 verticesArray.Add(vertex);
+                //Debug.Log(vertex);
             }
 
             foreach (Vector3 normal in generatedHexMeshes[i].normals)
             {
                 normalsArray.Add(normal);
+                //Debug.Log(normal);
             }
 
             foreach (Vector2 uv in generatedHexMeshes[i].uv)
@@ -112,7 +114,7 @@ public class MeshGenerator : MonoBehaviour
         finalMesh.normals = normalsArray.ToArray(typeof(Vector3)) as Vector3[];
         finalMesh.uv = uvArray.ToArray(typeof(Vector2)) as Vector2[];
 
-        return generatedHexMeshes[displayIndex];
+        return finalMesh;
     }
     
     private Mesh generateSideTokenMesh(Vector3[] sideTokenVertices)
