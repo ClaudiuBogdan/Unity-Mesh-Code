@@ -11,9 +11,20 @@ public class MeshGenerator : MonoBehaviour
     private int displayIndex = 0;
 
     // Use this for initialization
-    void Start() { 
-        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken();
+    void Start() {
+        Vector3 centerHexagon = new Vector3(0, 0, 0);
+        Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
+        Vector3 rotationalVectorHexagon = new Vector3(0, 0, 2);
+        Vector3[] firstHexagon = generateHexInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
+
+        Vector3 centerHexagon2 = new Vector3(0, 10, 0);
+        Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
+        Vector3 rotationalVectorHexagon2 = new Vector3(0, 0, 2);
+        Vector3[] secondHexagon = generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+
+        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken(firstHexagon, secondHexagon);
         //StartCoroutine(changeSide());
+        getLastHex(generateHexToken(firstHexagon, secondHexagon));
     }
 	
 	// Update is called once per frame
@@ -24,7 +35,7 @@ public class MeshGenerator : MonoBehaviour
 
     IEnumerator changeSide()
     {
-        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken();
+        //GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken();
         displayIndex = displayIndex < 5 ? displayIndex + 1 : 0;
         yield return new WaitForSeconds(0.016f);
         //Debug.Log("Mesh changed: " + displayIndex);
@@ -32,21 +43,8 @@ public class MeshGenerator : MonoBehaviour
 
     }
 
-    private Mesh generateHexToken()
+    private Mesh generateHexToken(Vector3[] firstHexagon, Vector3[] secondHexagon)
     {
-        Vector3[] firstHexagon;
-        Vector3[] secondHexagon;
-
-        Vector3 centerHexagon = new Vector3(0, 0, 0);
-        Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
-        Vector3 rotationalVectorHexagon = new Vector3(0, 0, 2);
-        firstHexagon = generateHexInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
-
-        Vector3 centerHexagon2 = new Vector3(0, 10, 0);
-        Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
-        Vector3 rotationalVectorHexagon2 = new Vector3(0, 0, 2);
-        secondHexagon = generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
-
         int sidesPerHexagon = 6;
         Mesh[] generatedHexMeshes = new Mesh[sidesPerHexagon];
         for (int i = 0; i < sidesPerHexagon; i++)
@@ -88,19 +86,16 @@ public class MeshGenerator : MonoBehaviour
             foreach (int triangle in generatedHexMeshes[i].triangles)
             {
                 trianglesArray.Add(triangle + (i * 4));
-                Debug.Log(triangle + (i * 4));
             }
 
             foreach (Vector3 vertex in generatedHexMeshes[i].vertices)
             {
                 verticesArray.Add(vertex);
-                //Debug.Log(vertex);
             }
 
             foreach (Vector3 normal in generatedHexMeshes[i].normals)
             {
                 normalsArray.Add(normal);
-                //Debug.Log(normal);
             }
 
             foreach (Vector2 uv in generatedHexMeshes[i].uv)
@@ -172,9 +167,43 @@ public class MeshGenerator : MonoBehaviour
         Vector3 centerHexagon = mHexagon[0];
         Vector3 normalVectorHexagon = mHexagon[1];
         Vector3 rotationalVectorHexagon = mHexagon[2];
-        Vector3 vertexVector = /*Quaternion.AngleAxis(-30 * vertexOfHexagon, Vector3.up)*/
-            centerHexagon + (Quaternion.Euler(0, -60 * vertexOfHexagon, 0) *
+        Vector3 vertexVector = /*Quaternion.AngleAxis(-60 * vertexOfHexagon, Vector3.up)*/ /*(Quaternion.Euler(0, -60 * vertexOfHexagon, 0)*/
+            centerHexagon +  (Quaternion.AngleAxis(-60  * vertexOfHexagon, normalVectorHexagon) *
                                rotationalVectorHexagon);
         return new Vector3(vertexVector.x, vertexVector.y, vertexVector.z);
+    }
+
+    private void deleteFirstHexMesh()
+    {
+
+    }
+
+    private Vector3[] getLastHex(Mesh hexMesh)
+    {
+        //Obtains three vertex from the las hexagon to calculate de center and the direction.
+        Vector3[] allHexVertices = hexMesh.vertices;
+        int lastVerticesIndex = allHexVertices.Length - 1;
+        Vector3 vertexOne = allHexVertices[lastVerticesIndex - 1];
+        Vector3 vertexTwo = allHexVertices[lastVerticesIndex - 0];
+        Vector3 vertexThree = allHexVertices[lastVerticesIndex - 4];
+
+        Debug.Log("vertexOne: " + vertexOne);
+        Debug.Log("vertexTwo: " + vertexTwo);
+        Debug.Log("vertexThree: " + vertexThree);
+
+        Vector3 centerHexagon2 = vertexOne - vertexTwo + vertexThree;
+        Vector3 normalVectorHexagon2 = Vector3.Cross(vertexOne - vertexTwo, vertexTwo - vertexThree).normalized;
+        Vector3 rotationalVectorHexagon2 = vertexTwo - vertexThree;
+
+        Debug.Log("centerHexagon2: " + centerHexagon2.ToString());
+        Debug.Log("normalVectorHexagon2: " + normalVectorHexagon2.ToString());
+        Debug.Log("rotationalVectorHexagon2: " + rotationalVectorHexagon2.ToString());
+
+        for (int i = 0; i < 12; i++)
+        {
+            Debug.Log("vertex index " + i + " equals: " + allHexVertices[lastVerticesIndex - i]);
+        }
+        return generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+
     }
 }
