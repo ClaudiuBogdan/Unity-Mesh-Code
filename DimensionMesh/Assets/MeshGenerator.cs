@@ -142,10 +142,11 @@ public class MeshGenerator : MonoBehaviour
 
         normals = new Vector3[normalsSideDimension];
 
-        normals[0] = -Vector3.forward;
-        normals[1] = -Vector3.forward;
-        normals[2] = -Vector3.forward;
-        normals[3] = -Vector3.forward;
+        Vector3 sideNormalVector = Vector3.Cross(sideTokenVertices[0] - sideTokenVertices[1], sideTokenVertices[1] - sideTokenVertices[2]).normalized;
+        normals[0] = sideNormalVector;
+        normals[1] = sideNormalVector;
+        normals[2] = sideNormalVector;
+        normals[3] = sideNormalVector;
 
 
         uv = new Vector2[uvSideDimension];
