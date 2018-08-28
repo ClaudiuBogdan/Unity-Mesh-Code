@@ -15,16 +15,34 @@ public class MeshGenerator : MonoBehaviour
         Vector3 centerHexagon = new Vector3(0, 0, 0);
         Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
         Vector3 rotationalVectorHexagon = new Vector3(0, 0, 2);
-        Vector3[] firstHexagon = generateHexInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
+        Hexagon firstHexagon = Hexagon.newInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
 
         Vector3 centerHexagon2 = new Vector3(0, 10, 0);
         Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
         Vector3 rotationalVectorHexagon2 = new Vector3(0, 0, 2);
-        Vector3[] secondHexagon = generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+        Hexagon secondHexagon = Hexagon.newInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
 
-        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken(firstHexagon, secondHexagon);
+        Vector3 centerHexagon3 = new Vector3(0, 20, 5);
+        Vector3 normalVectorHexagon3 = new Vector3(0, 1, 0);
+        Vector3 rotationalVectorHexagon3 = new Vector3(0, 0, 2);
+        Hexagon thirdHexagon = Hexagon.newInstance(centerHexagon3, normalVectorHexagon3, rotationalVectorHexagon3);
+
+        ArrayList tunnelMeshArray = new ArrayList();
+        foreach (Mesh sideMesh in generateHexToken(firstHexagon, secondHexagon))
+        {
+            tunnelMeshArray.Add(sideMesh);
+        }
+        foreach (Mesh sideMesh in generateHexToken(secondHexagon, thirdHexagon))
+        {
+            tunnelMeshArray.Add(sideMesh);
+        }
+
+        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
+            combineMeshes(tunnelMeshArray.ToArray(typeof(Mesh)) as Mesh[]);
+
+        //GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken(secondHexagon, thirdHexagon);
         //StartCoroutine(changeSide());
-        getLastHex(generateHexToken(firstHexagon, secondHexagon));
+        //getLastHex(generateHexToken(firstHexagon, secondHexagon));
     }
 	
 	// Update is called once per frame
@@ -43,7 +61,7 @@ public class MeshGenerator : MonoBehaviour
 
     }
 
-    private Mesh generateHexToken(Vector3[] firstHexagon, Vector3[] secondHexagon)
+    private Mesh[] generateHexToken(Hexagon firstHexagon, Hexagon secondHexagon)
     {
         int sidesPerHexagon = 6;
         Mesh[] generatedHexMeshes = new Mesh[sidesPerHexagon];
@@ -58,17 +76,7 @@ public class MeshGenerator : MonoBehaviour
             generatedHexMeshes[i] = generateSideTokenMesh(sideTokenVertices);
         }
 
-        return combineMeshes(generatedHexMeshes);
-    }
-
-    private Vector3[] generateHexInstance(Vector3 centerHexagon, Vector3 normalVectorHexagon, Vector3 rotationalVectorHexagon)
-    {
-        Vector3[] mHexagon = new Vector3[3];
-        mHexagon[0] = centerHexagon;
-        mHexagon[1] = normalVectorHexagon;
-        mHexagon[2] = rotationalVectorHexagon;
-
-        return mHexagon;
+         return generatedHexMeshes;
     }
 
     private Mesh combineMeshes(Mesh[] generatedHexMeshes)
@@ -162,15 +170,11 @@ public class MeshGenerator : MonoBehaviour
         sideMesh.uv = uv;
         return sideMesh;
     }
-
-    private Vector3 getHexVerticesVector(Vector3[]mHexagon, int vertexOfHexagon)
+    
+    private Vector3 getHexVerticesVector(Hexagon mHexagon, int vertexOfHexagon)
     {
-        Vector3 centerHexagon = mHexagon[0];
-        Vector3 normalVectorHexagon = mHexagon[1];
-        Vector3 rotationalVectorHexagon = mHexagon[2];
-        Vector3 vertexVector = /*Quaternion.AngleAxis(-60 * vertexOfHexagon, Vector3.up)*/ /*(Quaternion.Euler(0, -60 * vertexOfHexagon, 0)*/
-            centerHexagon +  (Quaternion.AngleAxis(-60  * vertexOfHexagon, normalVectorHexagon) *
-                               rotationalVectorHexagon);
+        Vector3 vertexVector = mHexagon.centerHexagon +  (Quaternion.AngleAxis(-60  * vertexOfHexagon, mHexagon.normalVectorHexagon) *
+                               mHexagon.rotationalVectorHexagon);
         return new Vector3(vertexVector.x, vertexVector.y, vertexVector.z);
     }
 
@@ -179,7 +183,7 @@ public class MeshGenerator : MonoBehaviour
 
     }
 
-    private Vector3[] getLastHex(Mesh hexMesh)
+    private Hexagon getLastHex(Mesh hexMesh)
     {
         //Obtains three vertex from the las hexagon to calculate de center and the direction.
         Vector3[] allHexVertices = hexMesh.vertices;
@@ -204,7 +208,7 @@ public class MeshGenerator : MonoBehaviour
         {
             Debug.Log("vertex index " + i + " equals: " + allHexVertices[lastVerticesIndex - i]);
         }
-        return generateHexInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+        return Hexagon.newInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
 
     }
 }
