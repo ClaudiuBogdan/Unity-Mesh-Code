@@ -40,7 +40,7 @@ public class MeshGenerator : MonoBehaviour
             Vector3 rotateReferenceHexNormal =
                 Vector3.Cross(lastHexagon.normalVectorHexagon, lastHexagon.rotationalVectorHexagon);
             Vector3 normalVectorHexagonNext = Hexagon.RotateVector(lastHexagon.normalVectorHexagon, 30, rotateReferenceHexNormal);
-            Hexagon nextHexagon = Hexagon.NewInstance(lastHexagon, distanceFromRefCenter: 5, normalVectorHexagon: normalVectorHexagonNext, radioDimension: 2, initialAngle: 30 * i);
+            Hexagon nextHexagon = Hexagon.NewInstance(lastHexagon, distanceFromRefCenter: 5 * i, normalVectorHexagon: normalVectorHexagonNext, radioDimension: 2, initialAngle: 0);
             foreach (Mesh sideMesh in generateHexToken(lastHexagon, nextHexagon))
             {
                 tunnelMeshList.Add(sideMesh);
