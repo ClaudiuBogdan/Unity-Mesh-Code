@@ -5,20 +5,47 @@ public class Hexagon
     public Vector3 centerHexagon;
     public Vector3 normalVectorHexagon;
     public Vector3 rotationalVectorHexagon;
+    private static readonly Vector3 referenceRotationalVector = new Vector3(1, 0, 0);
 
 
-    public Hexagon(Vector3 centerHexagon, Vector3 normalVectorHexagon, Vector3 rotationalVectorHexagon)
+    public Hexagon(Vector3 centerHexagon, Vector3 normalVectorHexagon, float radioDimension, float initialAngle)
     {
         this.centerHexagon = centerHexagon;
-        this.normalVectorHexagon = normalVectorHexagon;
-        this.rotationalVectorHexagon = rotationalVectorHexagon;
+        this.normalVectorHexagon = normalVectorHexagon.normalized;
+        this.rotationalVectorHexagon = CalculateRotationalVectorHexagon(radioDimension, initialAngle);
     }
 
-
-    public static Hexagon newInstance(Vector3 centerHexagon, Vector3 normalVectorHexagon, Vector3 rotationalVectorHexagon)
+    private Vector3 CalculateRotationalVectorHexagon(float radioDimension, float initialAngle)
     {
-        return new Hexagon(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
+        Vector3 rotationalBuilder = Vector3.Cross(normalVectorHexagon, referenceRotationalVector);
+        rotationalBuilder = rotationalBuilder.normalized;
+        rotationalBuilder = RotateVector(rotationalBuilder, initialAngle, normalVectorHexagon);
+        rotationalBuilder = rotationalBuilder * radioDimension;
+        return rotationalBuilder;
     }
 
 
+    public static Hexagon NewInstance(Vector3 centerHexagon, Vector3 normalVectorHexagon, float radioDimension, float initialAngle)
+    {
+        return new Hexagon(centerHexagon, normalVectorHexagon, radioDimension, initialAngle);
+    }
+
+    public static Hexagon NewInstance(Hexagon referenceHexagon, float distanceFromRefCenter, Vector3 normalVectorHexagon, float radioDimension, float initialAngle)
+    {
+        Vector3 centerHexagon = CalculateCenterHexagon(referenceHexagon, distanceFromRefCenter, normalVectorHexagon);
+        return new Hexagon(centerHexagon, normalVectorHexagon, radioDimension, initialAngle);
+    }
+
+    private static Vector3 CalculateCenterHexagon(Hexagon referenceHexagon, float distanceFromRefCenter, Vector3 normalVectorHexagon)
+    {
+        normalVectorHexagon = normalVectorHexagon.normalized;
+        Vector3 centerHexagon = referenceHexagon.centerHexagon + normalVectorHexagon * distanceFromRefCenter;
+        return centerHexagon;
+    }
+
+    public static Vector3 RotateVector(Vector3 vectorToRotate, float angles, Vector3 refVector)
+    {
+        return (Quaternion.AngleAxis(angles, refVector) *
+                vectorToRotate);
+    }
 }

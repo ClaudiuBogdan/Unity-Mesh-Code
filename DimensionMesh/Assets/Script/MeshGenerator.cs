@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class MeshGenerator : MonoBehaviour
@@ -14,31 +15,41 @@ public class MeshGenerator : MonoBehaviour
     void Start() {
         Vector3 centerHexagon = new Vector3(0, 0, 0);
         Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
-        Vector3 rotationalVectorHexagon = new Vector3(0, 0, 2);
-        Hexagon firstHexagon = Hexagon.newInstance(centerHexagon, normalVectorHexagon, rotationalVectorHexagon);
+        Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 4, initialAngle: 0);
 
         Vector3 centerHexagon2 = new Vector3(0, 10, 0);
         Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
-        Vector3 rotationalVectorHexagon2 = new Vector3(0, 0, 2);
-        Hexagon secondHexagon = Hexagon.newInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+        Hexagon secondHexagon = Hexagon.NewInstance(centerHexagon2, normalVectorHexagon2, radioDimension: 2, initialAngle: 0);
+      
 
-        Vector3 centerHexagon3 = new Vector3(0, 20, 5);
-        Vector3 normalVectorHexagon3 = new Vector3(0, 1, 0);
-        Vector3 rotationalVectorHexagon3 = new Vector3(0, 0, 2);
-        Hexagon thirdHexagon = Hexagon.newInstance(centerHexagon3, normalVectorHexagon3, rotationalVectorHexagon3);
-
-        ArrayList tunnelMeshArray = new ArrayList();
+        ArrayList tunnelMeshList = new ArrayList();
+        ArrayList tunnelHexagonsList = new ArrayList();
         foreach (Mesh sideMesh in generateHexToken(firstHexagon, secondHexagon))
         {
-            tunnelMeshArray.Add(sideMesh);
-        }
-        foreach (Mesh sideMesh in generateHexToken(secondHexagon, thirdHexagon))
-        {
-            tunnelMeshArray.Add(sideMesh);
+            tunnelMeshList.Add(sideMesh);
         }
 
+        tunnelHexagonsList.Add(firstHexagon);
+        tunnelHexagonsList.Add(secondHexagon);
+        int maxTunnelTokens = 100;
+        for (int i = 0; i < maxTunnelTokens; i++)
+        {
+            int a = 10;
+            int b = 20;
+            Hexagon lastHexagon = tunnelHexagonsList[tunnelHexagonsList.Count - 1] as Hexagon;
+            Vector3 rotateReferenceHexNormal =
+                Vector3.Cross(lastHexagon.normalVectorHexagon, lastHexagon.rotationalVectorHexagon);
+            Vector3 normalVectorHexagonNext = Hexagon.RotateVector(lastHexagon.normalVectorHexagon, 30, rotateReferenceHexNormal);
+            Hexagon nextHexagon = Hexagon.NewInstance(lastHexagon, distanceFromRefCenter: 5, normalVectorHexagon: normalVectorHexagonNext, radioDimension: 2, initialAngle: 30 * i);
+            foreach (Mesh sideMesh in generateHexToken(lastHexagon, nextHexagon))
+            {
+                tunnelMeshList.Add(sideMesh);
+            }
+            tunnelHexagonsList.Add(nextHexagon);
+        }
+        Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
         GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
-            combineMeshes(tunnelMeshArray.ToArray(typeof(Mesh)) as Mesh[]);
+            combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
 
         //GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh = generateHexToken(secondHexagon, thirdHexagon);
         //StartCoroutine(changeSide());
@@ -208,7 +219,8 @@ public class MeshGenerator : MonoBehaviour
         {
             Debug.Log("vertex index " + i + " equals: " + allHexVertices[lastVerticesIndex - i]);
         }
-        return Hexagon.newInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
-
+        //return Hexagon.newInstance(centerHexagon2, normalVectorHexagon2, rotationalVectorHexagon2);
+        throw new NotImplementedException();
+        return null;
     }
 }
