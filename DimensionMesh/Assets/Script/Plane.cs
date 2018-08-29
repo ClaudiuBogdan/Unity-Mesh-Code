@@ -24,6 +24,8 @@ namespace Assets.Script
             this.j = (firstVertexRight - firstVertexLeft);
             this.k = Vector3.Cross(i, j).normalized;
 
+            Debug.Log("i,j: " + i + j);
+
         }
 
         public Vector3 CalculateCoordinateBase(Vector3 mVector)
@@ -43,6 +45,31 @@ namespace Assets.Script
             Vector3 vectorTransformedCoordinates = new Vector3((float)transformedVector[0][0], (float)transformedVector[1][0], (float)transformedVector[2][0]);
             return vectorTransformedCoordinates;
 
+        }
+
+        public Vector3 CalculateOriginCoordinateBase(Vector3 mVector)
+        {
+            return CalculateCoordinateBase(mVector - firstVertexLeft);
+        }
+
+        public bool HasCrossedSuperiorSide(Vector3 mVector)
+        {
+            return CalculateOriginCoordinateBase(mVector).x > 1.0f;
+        }
+
+        public bool HasCrossedInferiorSide(Vector3 mVector)
+        {
+            return CalculateOriginCoordinateBase(mVector).x < 0.0f;
+        }
+
+        public bool HasCrossedLeftSide(Vector3 mVector)
+        {
+            return CalculateOriginCoordinateBase(mVector).y < 0.0f;
+        }
+
+        public bool HasCrossedRightSide(Vector3 mVector)
+        {
+            return CalculateOriginCoordinateBase(mVector).y > 1.0f;
         }
     }
 }
