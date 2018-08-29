@@ -6,9 +6,10 @@ namespace Assets.Script
     public class TunnelGenerator : MonoBehaviour {
 
         public ArrayList tunnelHexagonsList = new ArrayList();
+        public ArrayList tunnelMeshList = new ArrayList();
         // Use this for initialization
-        void Start () {
-
+        void Awake()
+        {
             Vector3 centerHexagon = new Vector3(0, 0, 0);
             Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
             Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 4, initialAngle: 0);
@@ -18,7 +19,7 @@ namespace Assets.Script
             Hexagon secondHexagon = Hexagon.NewInstance(centerHexagon2, normalVectorHexagon2, radioDimension: 2, initialAngle: 0);
 
 
-            ArrayList tunnelMeshList = new ArrayList();
+            
             foreach (Mesh sideMesh in MeshGenerator.generateHexToken(firstHexagon, secondHexagon))
             {
                 tunnelMeshList.Add(sideMesh);
@@ -42,6 +43,11 @@ namespace Assets.Script
                 }
                 tunnelHexagonsList.Add(nextHexagon);
             }
+        }
+
+        void Start () {
+
+           
             Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
             GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
                 MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);

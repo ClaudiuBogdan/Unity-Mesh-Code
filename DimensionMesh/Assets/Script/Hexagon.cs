@@ -45,6 +45,9 @@ namespace Assets.Script
             return centerHexagon;
         }
 
+        /**
+         * First vertices is index 0 and last vertices is index 5.
+         */
         public Vector3 GetHexVerticesVector(int vertexOfHexagon)
         {
             return GetHexVerticesVector(this, vertexOfHexagon);

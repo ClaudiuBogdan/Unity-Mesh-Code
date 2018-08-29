@@ -12,7 +12,17 @@ namespace Assets.Script
         public Vector3 secondVertexRight;
         public Vector3 secondVertexLeft;
 
+        public Plane()
+        {
+        }
+
         public Plane(Vector3 firstVertexRight, Vector3 firstVertexLeft, Vector3 secondVertexRight,
+            Vector3 secondVertexLeft)
+        {
+            SetPlane(firstVertexRight, firstVertexLeft, secondVertexRight, secondVertexLeft);
+        }
+
+        public void SetPlane(Vector3 firstVertexRight, Vector3 firstVertexLeft, Vector3 secondVertexRight,
             Vector3 secondVertexLeft)
         {
             this.firstVertexRight = firstVertexRight;
@@ -23,9 +33,6 @@ namespace Assets.Script
             this.i = (secondVertexLeft - firstVertexLeft);
             this.j = (firstVertexRight - firstVertexLeft);
             this.k = Vector3.Cross(i, j).normalized;
-
-            Debug.Log("i,j: " + i + j);
-
         }
 
         public Vector3 CalculateCoordinateBase(Vector3 mVector)
