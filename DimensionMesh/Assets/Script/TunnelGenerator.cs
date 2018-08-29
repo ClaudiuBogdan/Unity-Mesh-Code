@@ -12,7 +12,7 @@ namespace Assets.Script
         {
             Vector3 centerHexagon = new Vector3(0, 0, 0);
             Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
-            Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 4, initialAngle: 0);
+            Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 2, initialAngle: 0);
 
             Vector3 centerHexagon2 = new Vector3(0, 10, 0);
             Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
