@@ -1,5 +1,6 @@
 ﻿using System;
-namespace MatrixInverse
+
+namespace Assets.Script
 {
     public class MatrixInverseProgram
     {
