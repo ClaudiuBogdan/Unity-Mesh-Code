@@ -22,10 +22,10 @@ namespace Assets.Script
             Debug.Log(plane2.CalculateCoordinateBase(testVector3).ToString());  // [2.7, -0.14]
 
             //Test 3 calculateCoordenateBase()
-            Vector3 secondVertefLeft = new Vector3(1, 0, 0); //Base reference
-            Vector3 firstVertexRight = new Vector3(0, 1, 0);
-            Vector3 testVector4 = new Vector3(1, 1, 0);
-            Plane plane4 = new Plane(firstVertexRight, Vector3.zero /*new Vector3(1.0f, 1.0f, 0)*/, Vector3.zero, secondVertefLeft);
+            Vector3 secondVertefLeft = new Vector3(2, 0, 0); //Base reference
+            Vector3 firstVertexRight = new Vector3(0, 2, 0);
+            Vector3 testVector4 = new Vector3(2, 2, 0);
+            Plane plane4 = new Plane(firstVertexRight, /*Vector3.zero*/ new Vector3(1.0f, 1.0f, 0), Vector3.zero, secondVertefLeft);
             Debug.Log(plane4.CalculateOriginCoordinateBase(testVector4).ToString());  // [1, 1]
 
         }
