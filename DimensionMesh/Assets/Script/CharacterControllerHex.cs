@@ -8,9 +8,13 @@ namespace Assets.Script
         public GameObject playerObject;
         public GameObject tunnelObject;
 
+        private Rigidbody rigidBodyPlayer;
         private Plane playerPlane;
         private Vector3 tunnelDirection;
+        private Vector3 lateralDirection;
 
+        private float lateralSpeed =0.2f;
+        private float forwardSpeed = 0.01f;
         // Use this for initialization
         void Start ()
         {
@@ -27,24 +31,35 @@ namespace Assets.Script
             playerPlane.SetPlane(rightVerticesFirstHexagon, leftVerticesFirstHexagon, rightVerticesSecondHexagon, leftVerticesSecondHexagon);
             tunnelDirection = (secondHexagon.centerHexagon - firstHexagon.centerHexagon).normalized;
 
-            Vector3 localStartPosition = new Vector3(0f, 1f, 0.0f);
-            Vector3 startPlayerPosition = leftVerticesFirstHexagon; //playerPlane.CalculateGlobalPosition(localStartPosition);
+            Vector3 localStartPosition = new Vector3(0f, 0.5f, 0.0f);
+            Vector3 startPlayerPosition = playerPlane.CalculateGlobalPosition(localStartPosition);
             playerObject.transform.position = startPlayerPosition;
 
             Quaternion rotation = new Quaternion();
             rotation.SetLookRotation(tunnelDirection, playerPlane.planeNormal);
-            playerObject.transform.localRotation = rotation; 
+            playerObject.transform.localRotation = rotation;
 
+            rigidBodyPlayer = playerObject.GetComponent<Rigidbody>();
 
         }
 
         // Update is called once per frame
         void Update ()
         {
-            //playerObject.transform.position += tunnelDirection * 0.01f;
+            playerObject.transform.position += tunnelDirection * forwardSpeed;
         }
-        
-        
+
+        void FixedUpdate()
+        {
+            float moveHorizontal = Input.GetAxis("Horizontal");
+
+            Vector3 lateralMovement = playerPlane.j.normalized * moveHorizontal * lateralSpeed;
+
+            playerObject.transform.position += lateralMovement;
+            //rigidBodyPlayer.AddForce(movement * lateralSpeed);
+        }
+
+
 
     }
 }
