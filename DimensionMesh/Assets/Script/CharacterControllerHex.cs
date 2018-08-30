@@ -2,7 +2,7 @@
 
 namespace Assets.Script
 {
-    public class CharacterController : MonoBehaviour
+    public class CharacterControllerHex : MonoBehaviour
     {
 
         public GameObject playerObject;
@@ -27,14 +27,14 @@ namespace Assets.Script
             playerPlane.SetPlane(rightVerticesFirstHexagon, leftVerticesFirstHexagon, rightVerticesSecondHexagon, leftVerticesSecondHexagon);
             tunnelDirection = (secondHexagon.centerHexagon - firstHexagon.centerHexagon).normalized;
 
-            Vector3 startPlayerPosition = leftVerticesFirstHexagon + ((rightVerticesFirstHexagon - leftVerticesFirstHexagon).normalized*(rightVerticesFirstHexagon - leftVerticesFirstHexagon).magnitude / 2);
+            Vector3 localStartPosition = new Vector3(0f, 1f, 0.0f);
+            Vector3 startPlayerPosition = playerPlane.CalculateGlobalPosition(localStartPosition);
             playerObject.transform.position = startPlayerPosition;
-            /*//Test 3 calculateCoordenateBase()
-            Vector3 secondVertefLeft = new Vector3(2, 0, 0); //Base reference
-            Vector3 firstVertexRight = new Vector3(0, 2, 0);
-            Vector3 testVector4 = new Vector3(2, 2, 0);
-            Plane plane4 = new Plane(firstVertexRight, /*Vector3.zero#1# new Vector3(1.0f, 1.0f, 0), Vector3.zero, secondVertefLeft);
-            Debug.Log(plane4.CalculateOriginCoordinateBase(testVector4).ToString());  // [1, 1]*/
+
+            Quaternion rotation = new Quaternion();
+            rotation.SetLookRotation(tunnelDirection, playerPlane.planeNormal);
+            playerObject.transform.localRotation = rotation; 
+
 
         }
 
