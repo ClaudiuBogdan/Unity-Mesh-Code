@@ -27,6 +27,9 @@ namespace Assets.Script
 
             tunnelHexagonsList.Add(firstHexagon);
             tunnelHexagonsList.Add(secondHexagon);
+
+/*
+
             int maxTunnelTokens = 100;
             for (int i = 0; i < maxTunnelTokens; i++)
             {
@@ -42,7 +45,7 @@ namespace Assets.Script
                     tunnelMeshList.Add(sideMesh);
                 }
                 tunnelHexagonsList.Add(nextHexagon);
-            }
+            }*/
         }
 
         void Start () {
@@ -51,6 +54,8 @@ namespace Assets.Script
             Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
             GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
                 MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
+
+            Debug.Log("First hexagon vertices: " + GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh.vertices[0]);
 
         }
 	

@@ -28,7 +28,7 @@ namespace Assets.Script
             tunnelDirection = (secondHexagon.centerHexagon - firstHexagon.centerHexagon).normalized;
 
             Vector3 localStartPosition = new Vector3(0f, 1f, 0.0f);
-            Vector3 startPlayerPosition = playerPlane.CalculateGlobalPosition(localStartPosition);
+            Vector3 startPlayerPosition = leftVerticesFirstHexagon; //playerPlane.CalculateGlobalPosition(localStartPosition);
             playerObject.transform.position = startPlayerPosition;
 
             Quaternion rotation = new Quaternion();
@@ -41,7 +41,7 @@ namespace Assets.Script
         // Update is called once per frame
         void Update ()
         {
-            playerObject.transform.position += tunnelDirection * 0.01f;
+            //playerObject.transform.position += tunnelDirection * 0.01f;
         }
         
         

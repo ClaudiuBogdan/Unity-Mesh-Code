@@ -7,7 +7,7 @@ namespace Assets.Script
         public Vector3 centerHexagon;
         public Vector3 normalVectorHexagon;
         public Vector3 rotationalVectorHexagon;
-        private static readonly Vector3 referenceRotationalVector = new Vector3(1, 0, 0);
+        private static readonly Vector3 referenceRotationalVector = Vector3.right;
 
 
         public Hexagon(Vector3 centerHexagon, Vector3 normalVectorHexagon, float radioDimension, float initialAngle)
