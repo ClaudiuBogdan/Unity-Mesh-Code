@@ -17,6 +17,10 @@ namespace Assets.Script
         private double[][] baseMatrix;
         public double[][] inverseMatrix;
 
+        public int planeOrigenIndex;
+
+        public Vector3 playerCenterPosition;
+
         public Plane()
         {
         }
@@ -49,6 +53,8 @@ namespace Assets.Script
 
             inverseMatrix = MatrixInverseProgram.MatrixInverse(baseMatrix);
         }
+
+
 
         /**
          * Method that returns the vector coordinate with reference to the local (plane) coordinates.
@@ -108,6 +114,28 @@ namespace Assets.Script
         public bool HasCrossedRightSide(Vector3 mVector)
         {
             return CalculateOriginCoordinateBase(mVector).y > 1.0f;
+        }
+
+
+
+        public bool HasCrossedSuperiorSide()
+        {
+            return HasCrossedSuperiorSide(playerCenterPosition);
+        }
+
+        public bool HasCrossedInferiorSide()
+        {
+            return HasCrossedInferiorSide(playerCenterPosition);
+        }
+
+        public bool HasCrossedLeftSide()
+        {
+            return HasCrossedLeftSide(playerCenterPosition);
+        }
+
+        public bool HasCrossedRightSide()
+        {
+            return HasCrossedRightSide(playerCenterPosition);
         }
     }
 }
