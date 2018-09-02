@@ -16,8 +16,8 @@ namespace Assets.Script
         private Vector3 tunnelDirection;
         private Vector3 lateralDirection;
 
-        private float lateralSpeed =0.2f;
-        private float forwardSpeed = 0.01f;
+        private float lateralSpeed = -0.2f;
+        private float forwardSpeed = 0.001f;
         // Use this for initialization
         void Start ()
         {
@@ -25,13 +25,10 @@ namespace Assets.Script
             playerPlane = new Plane();
             pos = new Vector3();
 
-            int planeOrigenIndex = 1;
+            int planeOrigenIndex = 2;
             playerPlane.planeOrigenIndex = planeOrigenIndex;
             SetPlayerPlane();
 
-            Vector3 localStartPosition = new Vector3(0f, 0.5f, 0.0f);
-            Vector3 startPlayerPosition = playerPlane.CalculateGlobalPosition(localStartPosition);
-            playerObject.transform.position = startPlayerPosition;
             
 
             rigidBodyPlayer = playerObject.GetComponent<Rigidbody>();
@@ -82,55 +79,62 @@ namespace Assets.Script
         {
             Debug.Log("Player moved to RIGHT plane");
             GetRightPlane();
+            MoveToRight(2.0f);
         }
 
         private void ChangeToNextLeftPlane()
         {
             Debug.Log("Player moved to LEFT plane");
             GetLeftPlane();
+            MoveToLeft(2.0f);
         }
 
         private void GetRightPlane()
         {
             //Get next plane origin index to the right
             int lastHexVertice = 5;
-            int firstHexVertice = 1;
+            int firstHexVertice = 0;
             playerPlane.planeOrigenIndex =
-                playerPlane.planeOrigenIndex < lastHexVertice ? playerPlane.planeOrigenIndex + 2 : firstHexVertice;
+                playerPlane.planeOrigenIndex < lastHexVertice ? playerPlane.planeOrigenIndex + 1 : firstHexVertice;
             SetPlayerPlane();
-            MoveToRight(1.0f);
         }
 
         private void GetLeftPlane()
         {
             //Get next plane origin index to the left
             int lastHexVertice = 5;
-            int firstHexVertice = 1;
+            int firstHexVertice = 0;
             playerPlane.planeOrigenIndex =
-                playerPlane.planeOrigenIndex > firstHexVertice ? playerPlane.planeOrigenIndex - 2 : lastHexVertice;
-            Debug.Log("Plane index: " + playerPlane.planeOrigenIndex);
+                playerPlane.planeOrigenIndex > firstHexVertice ? playerPlane.planeOrigenIndex - 1 : lastHexVertice;
             SetPlayerPlane();
-            MoveToLeft(1.0f);
         }
 
         private void SetPlayerPlane()
         {
+            Debug.Log("Plane index at set time: " + playerPlane.planeOrigenIndex);
+            //lateralSpeed = -lateralSpeed;
             Hexagon firstHexagon = tunnelGenerator.tunnelHexagonsList[0] as Hexagon;
             Hexagon secondHexagon = tunnelGenerator.tunnelHexagonsList[1] as Hexagon;
 
-            Vector3 rightVerticesFirstHexagon = (firstHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex - 1);
+            Vector3 rightVerticesFirstHexagon = (firstHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex + 1);
             Vector3 leftVerticesFirstHexagon = (firstHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex);
 
-            Vector3 rightVerticesSecondHexagon = (secondHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex - 1);
-            Vector3 leftVerticesSecondHexagon = (secondHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex);
+            Vector3 rightVerticesSecondHexagon = (secondHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex);
+            Vector3 leftVerticesSecondHexagon = (secondHexagon).GetHexVerticesVector(playerPlane.planeOrigenIndex + 1);
 
             playerPlane.SetPlane(rightVerticesFirstHexagon, leftVerticesFirstHexagon, rightVerticesSecondHexagon, leftVerticesSecondHexagon);
 
             tunnelDirection = (secondHexagon.centerHexagon - firstHexagon.centerHexagon).normalized;
 
+            Vector3 localStartPosition = new Vector3(0f, 0.5f, 0.0f);
+            Vector3 startPlayerPosition = playerPlane.CalculateGlobalPosition(localStartPosition);
+            playerObject.transform.position = startPlayerPosition;
+
             Quaternion rotation = new Quaternion();
-            rotation.SetLookRotation(tunnelDirection, playerPlane.planeNormal);
-            //playerObject.transform.localRotation = rotation;
+            rotation.SetLookRotation(tunnelDirection, -playerPlane.planeNormal);
+            playerObject.transform.localRotation = rotation;
+
+
         }
 
         private void MoveToRight(float distance)

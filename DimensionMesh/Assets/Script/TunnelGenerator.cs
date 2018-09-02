@@ -53,8 +53,7 @@ namespace Assets.Script
            
             Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
             GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
-                MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
-
+            MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
             Debug.Log("First hexagon vertices: " + GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh.vertices[0]);
 
         }

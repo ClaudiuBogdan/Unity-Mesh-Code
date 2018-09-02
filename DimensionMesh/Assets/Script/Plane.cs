@@ -108,11 +108,13 @@ namespace Assets.Script
 
         public bool HasCrossedLeftSide(Vector3 mVector)
         {
+            Debug.Log("Position passed left limit: " + CalculateOriginCoordinateBase(mVector).y);
             return CalculateOriginCoordinateBase(mVector).y < 0.0f;
         }
 
         public bool HasCrossedRightSide(Vector3 mVector)
         {
+            Debug.Log("Position passed right limit: " + CalculateOriginCoordinateBase(mVector).y);
             return CalculateOriginCoordinateBase(mVector).y > 1.0f;
         }
 
