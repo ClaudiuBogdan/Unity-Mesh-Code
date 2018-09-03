@@ -14,6 +14,9 @@ namespace Assets.Script
         public Vector3 planeOrigin;
         public Vector3 planeNormal;
 
+        public Hexagon firstHexagon;
+        public Hexagon secondHexagon;
+
         private double[][] baseMatrix;
         public double[][] inverseMatrix;
 
