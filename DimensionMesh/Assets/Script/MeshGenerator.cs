@@ -35,7 +35,7 @@ namespace Assets.Script
 
             for (int i = 0; i < generatedHexMeshes.Length; i++)
             {
-                Debug.Log("Triangle length: " + generatedHexMeshes[i].triangles.Length);
+                //Debug.Log("Triangle length: " + generatedHexMeshes[i].triangles.Length);
                 foreach (int triangle in generatedHexMeshes[i].triangles)
                 {
                     trianglesArray.Add(triangle + (i * 4));

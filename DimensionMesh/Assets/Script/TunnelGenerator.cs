@@ -14,7 +14,7 @@ namespace Assets.Script
             Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
             Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 2, initialAngle: 0);
 
-            Vector3 centerHexagon2 = new Vector3(0, 100, 0);
+            Vector3 centerHexagon2 = new Vector3(0, 5, 0);
             Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
             Hexagon secondHexagon = Hexagon.NewInstance(centerHexagon2, normalVectorHexagon2, radioDimension: 2, initialAngle: 0);
 
@@ -28,10 +28,10 @@ namespace Assets.Script
             tunnelHexagonsList.Add(firstHexagon);
             tunnelHexagonsList.Add(secondHexagon);
 
-/*
 
-            int maxTunnelTokens = 100;
-            for (int i = 0; i < maxTunnelTokens; i++)
+
+            int maxTunnelTokens = 30;
+            for (int i = 1; i < maxTunnelTokens; i++)
             {
                 int a = 10;
                 int b = 20;
@@ -45,7 +45,7 @@ namespace Assets.Script
                     tunnelMeshList.Add(sideMesh);
                 }
                 tunnelHexagonsList.Add(nextHexagon);
-            }*/
+            }
         }
 
         void Start () {

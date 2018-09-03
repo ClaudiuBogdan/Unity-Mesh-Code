@@ -14,8 +14,10 @@ namespace Assets.Script
         public Vector3 planeOrigin;
         public Vector3 planeNormal;
 
+        public TunnelGenerator tunnelGenerator;
         public Hexagon firstHexagon;
         public Hexagon secondHexagon;
+        public int firstHexagonIndex;
 
         private double[][] baseMatrix;
         public double[][] inverseMatrix;
@@ -55,6 +57,14 @@ namespace Assets.Script
             baseMatrix[2][0] = i.z; baseMatrix[2][1] = j.z; baseMatrix[2][2] = k.z;
 
             inverseMatrix = MatrixInverseProgram.MatrixInverse(baseMatrix);
+        }
+
+        public void SetPlane()
+        {
+            this.firstHexagon = tunnelGenerator.tunnelHexagonsList[firstHexagonIndex] as Hexagon;
+            this.secondHexagon = tunnelGenerator.tunnelHexagonsList[firstHexagonIndex + 1] as Hexagon;
+            SetPlane(firstHexagon.GetHexVerticesVector(this.planeOrigenIndex + 1), firstHexagon.GetHexVerticesVector(this.planeOrigenIndex), secondHexagon.GetHexVerticesVector(this.planeOrigenIndex + 1),
+                secondHexagon.GetHexVerticesVector(this.planeOrigenIndex));
         }
 
 
@@ -101,6 +111,7 @@ namespace Assets.Script
 
         public bool HasCrossedSuperiorSide(Vector3 mVector)
         {
+            //Debug.Log("Position passed superior limit: " + CalculateOriginCoordinateBase(mVector).x);
             return CalculateOriginCoordinateBase(mVector).x > 1.0f;
         }
 
@@ -111,14 +122,14 @@ namespace Assets.Script
 
         public bool HasCrossedLeftSide(Vector3 mVector)
         {
-            Debug.Log("Position passed left limit: " + CalculateOriginCoordinateBase(mVector).y);
-            return CalculateOriginCoordinateBase(mVector).y < 0.0f;
+            //Debug.Log("Position passed left limit: " + CalculateOriginCoordinateBase(mVector).y);
+            return CalculateOriginCoordinateBase(mVector).y < 0.08f;
         }
 
         public bool HasCrossedRightSide(Vector3 mVector)
         {
-            Debug.Log("Position passed right limit: " + CalculateOriginCoordinateBase(mVector).y);
-            return CalculateOriginCoordinateBase(mVector).y > 1.0f;
+            //Debug.Log("Position passed right limit: " + CalculateOriginCoordinateBase(mVector).y);
+            return CalculateOriginCoordinateBase(mVector).y > 0.92f;
         }
 
 
