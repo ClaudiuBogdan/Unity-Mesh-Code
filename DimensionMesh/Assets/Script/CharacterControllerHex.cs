@@ -11,7 +11,7 @@ namespace Assets.Script
 
         public GameObject playerObject;
         public GameObject tunnelObject;
-        public Camera playerCamera;
+        public GameObject playerCamera;
         public Vector3 pos;
         
         private TunnelGenerator tunnelGenerator;
@@ -36,15 +36,7 @@ namespace Assets.Script
             playerPlane.planeOrigenIndex = planeOrigenIndex;
             playerPlane.firstHexagonIndex = 0;
             SetPlayerPlane();
-
-            //Camera init
-            Vector3 firstHexagonCenter = (tunnelGenerator.tunnelHexagonsList[0] as Hexagon).centerHexagon;
-            Vector3 firstHexagonLocalCenter = playerPlane.CalculateCoordinateLocalBase(firstHexagonCenter);
-            firstHexagonCenter = playerPlane.CalculateGlobalPosition(new Vector3(firstHexagonLocalCenter.x - 0.7f, firstHexagonLocalCenter.y, firstHexagonLocalCenter.z));
-            playerCamera.transform.position = firstHexagonCenter;
-            Quaternion rotation = new Quaternion();
-            rotation.SetLookRotation(tunnelDirection, firstHexagonCenter - playerPlane.firstVertexRight);
-            playerCamera.transform.localRotation = rotation;
+            
 
             rigidBodyPlayer = playerObject.GetComponent<Rigidbody>();
 
@@ -178,6 +170,15 @@ namespace Assets.Script
             Quaternion rotation = new Quaternion();
             rotation.SetLookRotation(tunnelDirection, -playerPlane.planeNormal);
             playerObject.transform.localRotation = rotation;
+
+            //Camera init
+            Vector3 firstHexagonCenter = playerPlane.firstHexagon.centerHexagon;
+            Vector3 firstHexagonLocalCenter = playerPlane.CalculateCoordinateLocalBase(firstHexagonCenter);
+            firstHexagonCenter = playerPlane.CalculateGlobalPosition(new Vector3(initialForwardPercentage , firstHexagonLocalCenter.y, firstHexagonLocalCenter.z));
+            playerCamera.transform.position = firstHexagonCenter;
+            Quaternion cameraRotation = new Quaternion();
+            cameraRotation.SetLookRotation(tunnelDirection, firstHexagonCenter - playerPlane.firstHexagon.GetHexVerticesVector(0));
+            playerCamera.transform.localRotation = cameraRotation;
         }
 
         private void MoveToRight(float distance)
