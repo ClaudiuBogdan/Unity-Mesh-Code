@@ -38,6 +38,11 @@ namespace Assets.Script
             SetPlayerPlane();
             SetPlayerCamera();
 
+            //Initial camera rotation
+            Quaternion cameraRotation = new Quaternion();
+            cameraRotation.SetLookRotation(tunnelDirection, playerPlane.firstHexagon.centerHexagon - playerPlane.firstHexagon.GetHexVerticesVector(0));
+            playerCamera.transform.localRotation = cameraRotation;
+
             rigidBodyPlayer = playerObject.GetComponent<Rigidbody>();
 
         }
