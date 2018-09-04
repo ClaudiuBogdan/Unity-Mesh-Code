@@ -36,7 +36,7 @@ namespace Assets.Script
             playerPlane.planeOrigenIndex = planeOrigenIndex;
             playerPlane.firstHexagonIndex = 0;
             SetPlayerPlane();
-            
+            SetPlayerCamera();
 
             rigidBodyPlayer = playerObject.GetComponent<Rigidbody>();
 
@@ -86,23 +86,29 @@ namespace Assets.Script
             {
                 ChangeToNextSuperiorPlane();
             }
+
+            if (IsCameraInTransition())
+            {
+                Debug.Log("Camera in transition");
+                PerformCameraTransition();
+            }
         }
+        
 
         private void ChangeToNextSuperiorPlane()
         {
             playerPlane.firstHexagonIndex = playerPlane.firstHexagonIndex + 1;
             SetPlayerPlane(MOVED_FROM_INFERIOR_PLANE);
+            SetPlayerCamera();                  
         }
 
         private void ChangeToNextRightPlane()
         {
-            Debug.Log("Player moved to RIGHT plane");
             GetRightPlane();            
         }
 
         private void ChangeToNextLeftPlane()
         {
-            Debug.Log("Player moved to LEFT plane");
             GetLeftPlane();            
         }
 
@@ -158,7 +164,6 @@ namespace Assets.Script
                     initialForwardPercentage = 0;
                     break;
             }
-            Debug.Log("Plane index at set time: " + playerPlane.planeOrigenIndex);
             //lateralSpeed = -lateralSpeed;         
 
             tunnelDirection = (playerPlane.secondHexagon.centerHexagon - playerPlane.firstHexagon.centerHexagon).normalized;
@@ -170,15 +175,7 @@ namespace Assets.Script
             Quaternion rotation = new Quaternion();
             rotation.SetLookRotation(tunnelDirection, -playerPlane.planeNormal);
             playerObject.transform.localRotation = rotation;
-
-            //Camera init
-            Vector3 firstHexagonCenter = playerPlane.firstHexagon.centerHexagon;
-            Vector3 firstHexagonLocalCenter = playerPlane.CalculateCoordinateLocalBase(firstHexagonCenter);
-            firstHexagonCenter = playerPlane.CalculateGlobalPosition(new Vector3(initialForwardPercentage , firstHexagonLocalCenter.y, firstHexagonLocalCenter.z));
-            playerCamera.transform.position = firstHexagonCenter;
-            Quaternion cameraRotation = new Quaternion();
-            cameraRotation.SetLookRotation(tunnelDirection, firstHexagonCenter - playerPlane.firstHexagon.GetHexVerticesVector(0));
-            playerCamera.transform.localRotation = cameraRotation;
+            
         }
 
         private void MoveToRight(float distance)
@@ -191,6 +188,35 @@ namespace Assets.Script
         {
             Vector3 lateralMovement = playerPlane.j.normalized * -Mathf.Abs(distance) * lateralSpeed;
             playerObject.transform.position += lateralMovement;
+        }
+
+        private void SetPlayerCamera()
+        {
+            //Camera init
+            Vector3 firstHexagonCenter = playerPlane.firstHexagon.centerHexagon;
+            Vector3 firstHexagonLocalCenter = playerPlane.CalculateCoordinateLocalBase(firstHexagonCenter);
+            firstHexagonCenter = playerPlane.CalculateGlobalPosition(new Vector3(0, firstHexagonLocalCenter.y, firstHexagonLocalCenter.z));
+            playerCamera.transform.position = firstHexagonCenter;
+            /*Quaternion cameraRotation = new Quaternion();
+            cameraRotation.SetLookRotation(tunnelDirection, playerPlane.firstHexagon.centerHexagon - playerPlane.firstHexagon.GetHexVerticesVector(0));
+            playerCamera.transform.localRotation = cameraRotation;*/
+        }
+
+        private void PerformCameraTransition()
+        {
+            Quaternion cameraRotation = new Quaternion();
+            Vector3 vectorTransition = (playerCamera.transform.forward - tunnelDirection).normalized * 0.01f;
+            cameraRotation.SetLookRotation(playerCamera.transform.forward - vectorTransition, playerPlane.firstHexagon.centerHexagon - playerPlane.firstHexagon.GetHexVerticesVector(0));
+            playerCamera.transform.localRotation = cameraRotation;
+        }
+
+        private bool IsCameraInTransition()
+        {
+            Quaternion cameraRotation = new Quaternion();
+            cameraRotation.SetLookRotation(tunnelDirection, playerPlane.firstHexagon.centerHexagon - playerPlane.firstHexagon.GetHexVerticesVector(0));
+            Vector3 cameraAngles = playerCamera.transform.forward;
+            Vector3 distanceToEndTransition =  Vector3.Cross(cameraAngles.normalized, tunnelDirection.normalized);
+            return distanceToEndTransition.magnitude > 0.1f;
         }
     }
 }
