@@ -69,20 +69,12 @@ namespace Assets.Script
 
             //Lateral movement
             float moveHorizontal = Input.GetAxis("Horizontal");
-            Vector3 lateralMovement = Vector3.Cross(playerPlane.planeNormal, tunnelDirection).normalized * GetLateralFactor(moveHorizontal);
+            Vector3 lateralMovement = playerPlane.j.normalized * moveHorizontal * lateralSpeed;
             playerObject.transform.position += lateralMovement;
             //rigidBodyPlayer.AddForce(movement * lateralSpeed);
-            Debug.Log(GetLateralFactor(moveHorizontal));
+
             //Detect plane change
             DetectPlaneChange();
-        }
-
-        private float GetLateralFactor(float moveHorizontal)
-        {
-            float lateralLimitFactor = 0.4f;
-            float lateralFactor = moveHorizontal * lateralSpeed;
-            int factorSign = lateralFactor > 0 ? 1 : -1;
-            return Mathf.Abs(lateralFactor) > lateralLimitFactor ? lateralLimitFactor * factorSign : lateralFactor;
         }
 
         private void DetectPlaneChange()
