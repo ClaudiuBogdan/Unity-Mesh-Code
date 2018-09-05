@@ -22,7 +22,7 @@ namespace Assets.Script
         private Vector3 lateralDirection;
 
         private float lateralSpeed = -0.2f;
-        private float forwardSpeed = 0.05f;
+        private float forwardSpeed = 0.15f;
         // Use this for initialization
         void Start ()
         {
