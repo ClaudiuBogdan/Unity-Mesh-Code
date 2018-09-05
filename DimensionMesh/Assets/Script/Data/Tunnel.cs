@@ -19,8 +19,8 @@ public class Tunnel
 
     public void SetTunnelPlane(ArrayList tunnelHexagonsList, int hexagonIndex, int planeIndex)
     {
-        Plane tunnelPlane = TunnelPlanesList[planeIndex] as Plane;
-        if (tunnelPlane == null)
+        Plane tunnelPlane = TunnelPlanesList.Count >= planeIndex ? TunnelPlanesList[planeIndex] as Plane : null;
+        if (true/*tunnelPlane == null*/)
         {
             //Create tunnel plane
             tunnelPlane = new Plane();
@@ -40,8 +40,11 @@ public class Tunnel
     {
         int firstPlaneIndex = 0;
         int lastPlaneIndex = 5;
-
-        for (int planeIndex = firstPlaneIndex; planeIndex < lastPlaneIndex; planeIndex++)
+        for (int planeIndex = firstPlaneIndex; planeIndex <= lastPlaneIndex; planeIndex++)
+        {
+           TunnelPlanesList.Add(null);
+        }
+        for (int planeIndex = firstPlaneIndex; planeIndex <= lastPlaneIndex; planeIndex++)
         {
             SetTunnelPlane(tunnelHexagonsList, hexagonIndex, planeIndex);
         }
