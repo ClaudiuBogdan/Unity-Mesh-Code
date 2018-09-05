@@ -648,9 +648,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 11892c6d-c60c-4c19-8f1a-b403c50346d9
+  cloudProjectId: 6eba64e3-2da1-47f4-96c3-f12d73a5b10f
   projectName: DimensionMesh
-  organizationId: claudiu93
+  organizationId: lorenzo17
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
