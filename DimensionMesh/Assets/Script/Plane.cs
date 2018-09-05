@@ -59,7 +59,7 @@ namespace Assets.Script
             inverseMatrix = MatrixInverseProgram.MatrixInverse(baseMatrix);
         }
 
-        public void SetPlane()
+        public void SetPlane(int firstHexagonIndex)
         {
             this.firstHexagon = tunnelGenerator.tunnelHexagonsList[firstHexagonIndex] as Hexagon;
             this.secondHexagon = tunnelGenerator.tunnelHexagonsList[firstHexagonIndex + 1] as Hexagon;
@@ -67,6 +67,11 @@ namespace Assets.Script
                 secondHexagon.GetHexVerticesVector(this.planeOrigenIndex));
         }
 
+        public void SetPlane()
+        {
+            SetPlane(firstHexagon.GetHexVerticesVector(this.planeOrigenIndex + 1), firstHexagon.GetHexVerticesVector(this.planeOrigenIndex), secondHexagon.GetHexVerticesVector(this.planeOrigenIndex + 1),
+                secondHexagon.GetHexVerticesVector(this.planeOrigenIndex));
+        }
 
 
         /**
