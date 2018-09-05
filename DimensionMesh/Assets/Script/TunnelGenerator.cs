@@ -10,6 +10,42 @@ namespace Assets.Script
         // Use this for initialization
         void Awake()
         {
+            GenerateTunnelHexagons();
+            GenerateTunnelLights();
+        }
+
+        void Start () {
+
+           
+            Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
+            GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
+            MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
+            Debug.Log("First hexagon vertices: " + GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh.vertices[0]);
+
+        }
+	
+        // Update is called once per frame
+        void Update () {
+
+        }
+
+        private void GenerateTunnelLights()
+        {
+            Tunnel tunnelToken = new Tunnel();
+            for (int hexagonIndex = 0; hexagonIndex < tunnelHexagonsList.Count - 1; hexagonIndex++)
+            {
+                tunnelToken.SetAllTunnelPlanes(tunnelHexagonsList, hexagonIndex);
+                Vector3 firstNormal = (tunnelToken.TunnelPlanesList[4] as Plane).planeNormal;
+                Vector3 secondNormal = (tunnelToken.TunnelPlanesList[5] as Plane).planeNormal;
+                Vector3 lightNormal = (firstNormal + secondNormal).normalized;
+
+
+
+            }
+        }
+
+        private void GenerateTunnelHexagons() {
+
             Vector3 centerHexagon = new Vector3(0, 0, 0);
             Vector3 normalVectorHexagon = new Vector3(0, 1, 0);
             Hexagon firstHexagon = Hexagon.NewInstance(centerHexagon, normalVectorHexagon, radioDimension: 2, initialAngle: 0);
@@ -19,7 +55,7 @@ namespace Assets.Script
             Hexagon secondHexagon = Hexagon.NewInstance(centerHexagon2, normalVectorHexagon2, radioDimension: 2, initialAngle: 0);
 
 
-            
+
             foreach (Mesh sideMesh in MeshGenerator.generateHexToken(firstHexagon, secondHexagon))
             {
                 tunnelMeshList.Add(sideMesh);
@@ -46,21 +82,6 @@ namespace Assets.Script
                 }
                 tunnelHexagonsList.Add(nextHexagon);
             }
-        }
-
-        void Start () {
-
-           
-            Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
-            GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
-            MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
-            Debug.Log("First hexagon vertices: " + GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh.vertices[0]);
-
-        }
-	
-        // Update is called once per frame
-        void Update () {
-		
         }
     }
 }

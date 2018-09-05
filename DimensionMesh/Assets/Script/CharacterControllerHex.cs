@@ -152,6 +152,7 @@ namespace Assets.Script
 
         private void SetPlayerPlane(int movedFromDirection)
         {
+            playerPlane.SetPlane(playerPlane.firstHexagonIndex);
             Vector3 playerGlobalCoordPosition = playerObject.transform.position;
             Vector3 playerLocalCoordPosition = playerPlane.CalculateCoordinateLocalBase(playerGlobalCoordPosition);
 
@@ -189,12 +190,7 @@ namespace Assets.Script
             playerObject.transform.localRotation = rotation;
             
         }
-
-        private void SetPlayerPlane(int moveDirection, int hexagonIndex)
-        {
-            playerPlane.SetPlane(playerPlane.firstHexagonIndex);
-            SetPlayerPlane(moveDirection);
-        }
+        
 
         private void MoveToRight(float distance)
         {
