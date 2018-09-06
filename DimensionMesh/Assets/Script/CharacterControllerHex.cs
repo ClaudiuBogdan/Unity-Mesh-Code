@@ -161,11 +161,11 @@ namespace Assets.Script
             switch (movedFromDirection)
             {
                 case MOVED_FROM_LEFT:
-                    initialLaterlPercentage = 0.1f;
+                    initialLaterlPercentage = 0.15f;
                     initialForwardPercentage = playerLocalCoordPosition.x;
                     break;
                 case MOVED_FROM_RIGHT:
-                    initialLaterlPercentage = 0.9f;
+                    initialLaterlPercentage = 0.85f;
                     initialForwardPercentage = playerLocalCoordPosition.x;
                     break;
                 case MOVED_FROM_CENTER:
