@@ -7,6 +7,7 @@ namespace Assets.Script
 
         public ArrayList tunnelHexagonsList = new ArrayList();
         public ArrayList tunnelMeshList = new ArrayList();
+        public ArrayList tunnelLightsList = new ArrayList();
         public GameObject LightObject;
         // Use this for initialization
         void Awake()
@@ -44,10 +45,16 @@ namespace Assets.Script
                 Quaternion lightRotation = new Quaternion();
                 Plane referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
                 lightRotation.SetLookRotation(lightNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.firstHexagon.GetHexVerticesVector(0));
-                Vector3 positionFirstLight = referencePlane.CalculateGlobalPosition(new Vector3(0.33f,0,-0.2f));
-                Vector3 positionSecondLight = referencePlane.CalculateGlobalPosition(new Vector3(0.66f, 0, -0.2f));
-                GameObject lightClone = (GameObject)Instantiate(LightObject, positionFirstLight, lightRotation);
-                GameObject lightClone2 = (GameObject)Instantiate(LightObject, positionSecondLight, lightRotation);
+                int lightsPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 10) + 1;
+                Debug.Log("Plane longitud: " + (tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude);
+                for (int lightIndex = 1; lightIndex <= lightsPerTunnel; lightIndex++)
+                {
+                    Vector3 positionFirstLight = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f/(lightsPerTunnel + 1), 0, -0.2f));
+                    GameObject lightClone = (GameObject)Instantiate(LightObject, positionFirstLight, lightRotation);
+                    tunnelLightsList.Add(lightClone);
+                }
+                
+                
             }
         }
 
