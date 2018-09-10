@@ -46,7 +46,7 @@ namespace Assets.Script
                 Plane referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
                 lightRotation.SetLookRotation(lightNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.firstHexagon.GetHexVerticesVector(0));
                 int lightsPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 10) + 1;
-                Debug.Log("Plane longitud: " + (tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude);
+              
                 for (int lightIndex = 1; lightIndex <= lightsPerTunnel; lightIndex++)
                 {
                     Vector3 positionFirstLight = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f/(lightsPerTunnel + 1), 0, -0.2f));
@@ -96,6 +96,45 @@ namespace Assets.Script
                 }
                 tunnelHexagonsList.Add(nextHexagon);
             }
+        }
+
+        public ArrayList GetEnemyPositionList()
+        {
+            Tunnel tunnelToken = new Tunnel();
+            ArrayList enemyPositionList = new ArrayList();
+            for (int hexagonIndex = 0; hexagonIndex < tunnelHexagonsList.Count - 1; hexagonIndex++)
+            {
+                int indexFirstPlane = Random.Range(0, 5);
+                int indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
+                tunnelToken.SetAllTunnelPlanes(tunnelHexagonsList, hexagonIndex);
+                Vector3 firstNormal = (tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).planeNormal;
+                Vector3 secondNormal = (tunnelToken.TunnelPlanesList[indexSecondPlane] as Plane).planeNormal;
+                Vector3 enemyNormal = (-firstNormal).normalized;
+                Quaternion enemyRotation = new Quaternion();
+                Plane referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
+                enemyRotation.SetLookRotation(enemyNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.firstHexagon.GetHexVerticesVector(0));
+                int enemiesPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 2) + 1;
+                for (int lightIndex = 1; lightIndex <= enemiesPerTunnel; lightIndex++)
+                {
+                    Vector3 enemyPosition = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f / (enemiesPerTunnel + 1), Random.Range(0.0f, 1.0f), -0.2f));
+
+                    enemyPositionList.Add(enemyPosition);
+                    //enemyPositionList.Add(enemyRotation);
+
+                    indexFirstPlane = Random.Range(0, 5);
+                    indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
+                    tunnelToken.SetAllTunnelPlanes(tunnelHexagonsList, hexagonIndex);
+                    firstNormal = (tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).planeNormal;
+                    secondNormal = (tunnelToken.TunnelPlanesList[indexSecondPlane] as Plane).planeNormal;
+                    enemyNormal = (-firstNormal).normalized;
+                    enemyRotation = new Quaternion();
+                    referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
+
+                }
+
+
+            }
+            return enemyPositionList;
         }
     }
 }

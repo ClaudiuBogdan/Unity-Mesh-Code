@@ -72,7 +72,6 @@ namespace Assets.Script
             Vector3 lateralMovement = Vector3.Cross(playerPlane.planeNormal, tunnelDirection).normalized * GetLateralFactor(moveHorizontal);
             playerObject.transform.position += lateralMovement;
             //rigidBodyPlayer.AddForce(movement * lateralSpeed);
-            Debug.Log(GetLateralFactor(moveHorizontal));
             //Detect plane change
             DetectPlaneChange();
         }
@@ -102,7 +101,6 @@ namespace Assets.Script
 
             if (IsCameraInTransition())
             {
-                Debug.Log("Camera in transition");
                 PerformCameraTransition();
             }
         }
