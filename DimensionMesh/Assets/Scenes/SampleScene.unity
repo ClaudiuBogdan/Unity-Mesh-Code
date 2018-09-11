@@ -592,6 +592,7 @@ GameObject:
   - component: {fileID: 1290074953}
   - component: {fileID: 1290074952}
   - component: {fileID: 1290074954}
+  - component: {fileID: 1290074955}
   m_Layer: 0
   m_Name: MeshContainer
   m_TagString: Untagged
@@ -640,3 +641,17 @@ MonoBehaviour:
   tunnelObject: {fileID: 1290074951}
   playerCamera: {fileID: 80870418}
   pos: {x: 0, y: 0, z: 0}
+--- !u!114 &1290074955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1290074951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1fd1402b3442147b91961aae16aa20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyPrefab: {fileID: 1615127707650982, guid: 0088096f47ec849429f7d72c07042098,
+    type: 2}
+  tunnelObject: {fileID: 1290074951}

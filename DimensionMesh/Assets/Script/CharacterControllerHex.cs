@@ -69,12 +69,19 @@ namespace Assets.Script
 
             //Lateral movement
             float moveHorizontal = Input.GetAxis("Horizontal");
-            Vector3 lateralMovement = playerPlane.j.normalized * moveHorizontal * lateralSpeed;
+            Vector3 lateralMovement = Vector3.Cross(playerPlane.planeNormal, tunnelDirection).normalized * GetLateralFactor(moveHorizontal);
             playerObject.transform.position += lateralMovement;
             //rigidBodyPlayer.AddForce(movement * lateralSpeed);
-
             //Detect plane change
             DetectPlaneChange();
+        }
+
+        private float GetLateralFactor(float moveHorizontal)
+        {
+            float lateralLimitFactor = 0.4f;
+            float lateralFactor = moveHorizontal * lateralSpeed;
+            int factorSign = lateralFactor > 0 ? 1 : -1;
+            return Mathf.Abs(lateralFactor) > lateralLimitFactor ? lateralLimitFactor * factorSign : lateralFactor;
         }
 
         private void DetectPlaneChange()
@@ -94,7 +101,6 @@ namespace Assets.Script
 
             if (IsCameraInTransition())
             {
-                Debug.Log("Camera in transition");
                 PerformCameraTransition();
             }
         }
@@ -153,11 +159,11 @@ namespace Assets.Script
             switch (movedFromDirection)
             {
                 case MOVED_FROM_LEFT:
-                    initialLaterlPercentage = 0.1f;
+                    initialLaterlPercentage = 0.15f;
                     initialForwardPercentage = playerLocalCoordPosition.x;
                     break;
                 case MOVED_FROM_RIGHT:
-                    initialLaterlPercentage = 0.9f;
+                    initialLaterlPercentage = 0.85f;
                     initialForwardPercentage = playerLocalCoordPosition.x;
                     break;
                 case MOVED_FROM_CENTER:
