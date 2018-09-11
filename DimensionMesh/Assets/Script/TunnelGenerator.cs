@@ -17,13 +17,7 @@ namespace Assets.Script
         }
 
         void Start () {
-
-           
-            Debug.Log("Mesh tunnel tokens: " + tunnelHexagonsList.Count);
-            GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
-            MeshGenerator.combineMeshes(tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
-            Debug.Log("First hexagon vertices: " + GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh.vertices[0]);
-
+            
         }
 	
         // Update is called once per frame
@@ -68,16 +62,8 @@ namespace Assets.Script
             Vector3 normalVectorHexagon2 = new Vector3(0, 1, 0);
             Hexagon secondHexagon = Hexagon.NewInstance(centerHexagon2, normalVectorHexagon2, radioDimension: 2, initialAngle: 0);
 
-
-
-            foreach (Mesh sideMesh in MeshGenerator.generateHexToken(firstHexagon, secondHexagon))
-            {
-                tunnelMeshList.Add(sideMesh);
-            }
-
             tunnelHexagonsList.Add(firstHexagon);
             tunnelHexagonsList.Add(secondHexagon);
-
 
 
             int maxTunnelTokens = 30;
@@ -90,13 +76,11 @@ namespace Assets.Script
                     Vector3.Cross(lastHexagon.normalVectorHexagon, lastHexagon.rotationalVectorHexagon);
                 Vector3 normalVectorHexagonNext = Hexagon.RotateVector(lastHexagon.normalVectorHexagon, 30, rotateReferenceHexNormal);
                 Hexagon nextHexagon = Hexagon.NewInstance(lastHexagon, distanceFromRefCenter: 5 * i, normalVectorHexagon: normalVectorHexagonNext, radioDimension: 2, initialAngle: 0);
-                foreach (Mesh sideMesh in MeshGenerator.generateHexToken(lastHexagon, nextHexagon))
-                {
-                    tunnelMeshList.Add(sideMesh);
-                }
                 tunnelHexagonsList.Add(nextHexagon);
             }
         }
+
+        
 
         public ArrayList GetEnemyPositionList()
         {
@@ -134,6 +118,7 @@ namespace Assets.Script
 
 
             }
+            Debug.Log("Enemy initial list capacity: " + +enemyPositionList.Capacity);
             return enemyPositionList;
         }
     }

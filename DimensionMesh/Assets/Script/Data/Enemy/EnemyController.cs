@@ -17,11 +17,13 @@ public class EnemyController : MonoBehaviour
 	    _tunnelGenerator = tunnelObject.GetComponent<TunnelGenerator>();
         _enemyUnitList = new ArrayList();
 	    ArrayList enemyPositionList = _tunnelGenerator.GetEnemyPositionList();
-        Debug.Log("Enemy position list size: " + enemyPositionList.Capacity);
-	    for (int i = 5; i < enemyPositionList.Capacity; i = i + 1)
+        Debug.Log("Enemy position list size: " + enemyPositionList.Count);
+	    int increment = 1;
+	    for (int i = 5; i < enemyPositionList.Count - increment; i = i + increment)
 	    {
 	        Enemy enemyUnit = new Enemy(Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity));
             Transform enemyTransform = new RectTransform();
+            Debug.Log("Enemy index: " + i + " count: " + enemyPositionList.Count);
 	        enemyUnit.SetPosition(enemyPositionList[i] is Vector3 ? (Vector3) enemyPositionList[i] : new Vector3());
   
 	        _enemyUnitList.Add(enemyUnit);
@@ -34,5 +36,6 @@ public class EnemyController : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 		
+        //Render the objects
 	}
 }
