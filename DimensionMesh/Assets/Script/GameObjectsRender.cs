@@ -20,8 +20,9 @@ public class GameObjectsRender : MonoBehaviour {
 	void Start () {
         //init variables
 	    _hexagonsList = GameObject.Find("ScriptContainer").GetComponent<TunnelGenerator>().tunnelHexagonsList;
+	    GenerateTunnelMesh();
 
-	    RenderTunnelMesh();
+        RenderTunnelMesh();
 
 	}
 	
