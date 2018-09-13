@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameObjectsController : MonoBehaviour {
 
+    //Reference to the tunnel generator
+    private TunnelGenerator _tunnelGenerator;
     //Reference to the tunnel hexagons
     private ArrayList _hexagonsList;
     //Reference to the tunnel lights
@@ -22,7 +24,8 @@ public class GameObjectsController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //init variables
-	    _hexagonsList = GameObject.Find("ScriptContainer").GetComponent<TunnelGenerator>().tunnelHexagonsList;
+	    _tunnelGenerator = GameObject.Find("ScriptContainer").GetComponent<TunnelGenerator>();
+        _hexagonsList = _tunnelGenerator.tunnelHexagonsList;
         _playerController = GameObject.Find("ScriptContainer").GetComponent<CharacterControllerHex>();
 	    _enemiesController = GameObject.Find("ScriptContainer").GetComponent<EnemyController>();
         GenerateTunnelMesh();
@@ -36,16 +39,23 @@ public class GameObjectsController : MonoBehaviour {
 	    if (_playerTunnelPosition < GetCurrentPlayerTunnelPosition())
 	    {
 	        _playerTunnelPosition = GetCurrentPlayerTunnelPosition();
-
+	        UpdateControllersCurrentPosition(_playerTunnelPosition);
             //Deactivate last assets
             //List with game objects that will be deactivated
 	        RenderEnemies();
+            RenderLights();
             //Activate next assets
             //List with game objects that will be activated
 
             Debug.Log("Current player position: " + _playerTunnelPosition);
 	    }
 	}
+
+    private void UpdateControllersCurrentPosition(int playerTunnelPosition)
+    {
+        _enemiesController.SetCurrentTunnelPosition(playerTunnelPosition);
+        _tunnelGenerator.SetCurrentTunnelPosition(playerTunnelPosition);
+    }
 
     private void RenderTunnelMesh()
     {
@@ -55,14 +65,14 @@ public class GameObjectsController : MonoBehaviour {
 
     private void RenderEnemies()
     {
-        _enemiesController.SetCurrentTunnelPosition(GetCurrentPlayerTunnelPosition());
         _enemiesController.DestroyEnemiesList();
         _enemiesController.CreateEnemiesList();
     }
 
     private void RenderLights()
     {
-
+        _tunnelGenerator.DestroyTunnelLights();
+        _tunnelGenerator.CreateTunnelLights();
     }
 
     private void GenerateTunnelMesh()
