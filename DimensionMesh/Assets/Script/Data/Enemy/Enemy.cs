@@ -32,6 +32,9 @@ namespace Assets.Script.Data.Enemy
             this._enemyReference.transform.position = enemyPosition;
         }
 
-        
+        public GameObject GetEnemyReference()
+        {
+            return _enemyReference;
+        }
     }
 }

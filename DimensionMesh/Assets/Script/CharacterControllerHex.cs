@@ -231,7 +231,7 @@ namespace Assets.Script
             return distanceToEndTransition.magnitude > 0.1f;
         }
 
-        public Plane getPlayerPlane()
+        public Plane GetPlayerPlane()
         {
             return this.playerPlane;
         }

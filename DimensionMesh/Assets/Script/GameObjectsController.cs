@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Assets.Script;
 using UnityEngine;
 
-public class GameObjectsRender : MonoBehaviour {
+public class GameObjectsController : MonoBehaviour {
 
     //Reference to the tunnel hexagons
     private ArrayList _hexagonsList;
     //Reference to the tunnel lights
     private ArrayList _lightObjectsList;
     //Reference to the tunnel enemies
-    private ArrayList _enemiesList;
+    private EnemyController _enemiesController;
     //Reference to the tunnel mesh list
     private ArrayList _tunnelMeshList;
     //Reference to the player controller
@@ -24,6 +24,7 @@ public class GameObjectsRender : MonoBehaviour {
         //init variables
 	    _hexagonsList = GameObject.Find("ScriptContainer").GetComponent<TunnelGenerator>().tunnelHexagonsList;
         _playerController = GameObject.Find("ScriptContainer").GetComponent<CharacterControllerHex>();
+	    _enemiesController = GameObject.Find("ScriptContainer").GetComponent<EnemyController>();
         GenerateTunnelMesh();
 
         RenderTunnelMesh();
@@ -35,6 +36,13 @@ public class GameObjectsRender : MonoBehaviour {
 	    if (_playerTunnelPosition < GetCurrentPlayerTunnelPosition())
 	    {
 	        _playerTunnelPosition = GetCurrentPlayerTunnelPosition();
+
+            //Deactivate last assets
+            //List with game objects that will be deactivated
+	        RenderEnemies();
+            //Activate next assets
+            //List with game objects that will be activated
+
             Debug.Log("Current player position: " + _playerTunnelPosition);
 	    }
 	}
@@ -47,7 +55,9 @@ public class GameObjectsRender : MonoBehaviour {
 
     private void RenderEnemies()
     {
-
+        _enemiesController.SetCurrentTunnelPosition(GetCurrentPlayerTunnelPosition());
+        _enemiesController.DestroyEnemiesList();
+        _enemiesController.CreateEnemiesList();
     }
 
     private void RenderLights()
@@ -73,6 +83,6 @@ public class GameObjectsRender : MonoBehaviour {
 
     private int GetCurrentPlayerTunnelPosition()
     {
-        return _playerController.getPlayerPlane().firstHexagonIndex;
+        return _playerController.GetPlayerPlane().firstHexagonIndex;
     }
 }
