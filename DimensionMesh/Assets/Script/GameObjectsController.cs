@@ -44,6 +44,7 @@ public class GameObjectsController : MonoBehaviour {
             //List with game objects that will be deactivated
 	        RenderEnemies();
             RenderLights();
+            RenderTunnelMesh();
             //Activate next assets
             //List with game objects that will be activated
 
@@ -59,6 +60,7 @@ public class GameObjectsController : MonoBehaviour {
 
     private void RenderTunnelMesh()
     {
+        GenerateTunnelMesh();
         GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
             MeshGenerator.combineMeshes(_tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
     }
@@ -79,7 +81,8 @@ public class GameObjectsController : MonoBehaviour {
     {
         _tunnelMeshList = new ArrayList();
         Debug.Log("Hexagons list capacity: " + _hexagonsList.Capacity);
-        for (int i = 0; i < _hexagonsList.Capacity - 2; i++)
+        int tunnelSectionsToGenerate = 2;
+        for (int i = _playerTunnelPosition; i < _playerTunnelPosition + tunnelSectionsToGenerate; i++)
         {
             Hexagon lastHexagon = _hexagonsList[i] as Hexagon;
             Hexagon nextHexagon = _hexagonsList[i + 1] as Hexagon;
