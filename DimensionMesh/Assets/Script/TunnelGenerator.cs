@@ -38,7 +38,7 @@ namespace Assets.Script
             Quaternion lightRotation = new Quaternion();
             Plane referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
             lightRotation.SetLookRotation(lightNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.firstHexagon.GetHexVerticesVector(0));
-            int lightsPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 10) + 1;
+            int lightsPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 20) + 1;
           
             for (int lightIndex = 1; lightIndex <= lightsPerTunnel; lightIndex++)
             {
