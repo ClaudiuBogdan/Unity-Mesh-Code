@@ -26,7 +26,7 @@ namespace Assets.Script
 
         }
 
-        public void CreateTunnelLights()
+        public IEnumerator CreateTunnelLights()
         {
         Tunnel tunnelToken = new Tunnel();
             int indexFirstPlane = 3;
@@ -45,6 +45,7 @@ namespace Assets.Script
                 Vector3 positionFirstLight = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f/(lightsPerTunnel + 1), 0, -0.2f));
                 GameObject lightClone = (GameObject)Instantiate(LightObject, positionFirstLight, lightRotation);
                 tunnelLightsList.Add(lightClone);
+                yield return null;
             }
             
         }
@@ -127,6 +128,19 @@ namespace Assets.Script
         public void SetCurrentTunnelPosition(int playerTunnelPosition)
         {
             this._currentPlayerTunnelPosition = playerTunnelPosition;
+        }
+
+
+        public IEnumerator AutoGenerateTunnelLights()
+        {
+            for (int i = 0; i < tunnelLightsList.Count; i++)
+            {
+                GameObject lightObject = tunnelLightsList[i] as GameObject;
+                Destroy(lightObject);
+                yield return null;
+            }
+            tunnelLightsList = new ArrayList();
+            StartCoroutine(CreateTunnelLights());
         }
     }
 }

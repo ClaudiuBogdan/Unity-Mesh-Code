@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour
         this._currentTunnelIndex = currentTunnelPositionIndex;
     }
 
-    public void CreateEnemiesList()
+    public IEnumerator CreateEnemiesList()
     {
         ArrayList enemyPositionList = _tunnelGenerator.GetEnemyPositionList(_currentTunnelIndex);
         Debug.Log("Enemy position list size: " + enemyPositionList.Count);
@@ -45,16 +45,31 @@ public class EnemyController : MonoBehaviour
             enemyUnit.SetPosition(enemyPositionList[i] is Vector3 ? (Vector3)enemyPositionList[i] : new Vector3());
 
             _enemyUnitList.Add(enemyUnit);
+            yield return null;
         }
     }
 
-    public void DestroyEnemiesList()
+    public IEnumerator DestroyEnemiesList()
     {
         for (int i = 0; i < _enemyUnitList.Count; i++)
         {
             Enemy enemy = _enemyUnitList[i] as Enemy;
             Destroy(enemy.GetEnemyReference());
+            yield return null;
         }
         _enemyUnitList = new ArrayList();
     }
+
+    public IEnumerator AutoGenerateEnemies()
+    {
+        for (int i = 0; i < _enemyUnitList.Count; i++)
+        {
+            Enemy enemy = _enemyUnitList[i] as Enemy;
+            Destroy(enemy.GetEnemyReference());
+            yield return null;
+        }
+        _enemyUnitList = new ArrayList();
+        StartCoroutine(CreateEnemiesList());
+    }
+
 }

@@ -15,6 +15,8 @@ public class GameObjectsController : MonoBehaviour {
     private EnemyController _enemiesController;
     //Reference to the tunnel mesh list
     private ArrayList _tunnelMeshList;
+    //Reference to the GameObject tunnel mesh
+    private MeshFilter _tunnelMeshFilter;
     //Reference to the player controller
     private CharacterControllerHex _playerController;
     //Current player position
@@ -28,6 +30,7 @@ public class GameObjectsController : MonoBehaviour {
         _hexagonsList = _tunnelGenerator.tunnelHexagonsList;
         _playerController = GameObject.Find("ScriptContainer").GetComponent<CharacterControllerHex>();
 	    _enemiesController = GameObject.Find("ScriptContainer").GetComponent<EnemyController>();
+	    _tunnelMeshFilter = GameObject.Find("Transformar").GetComponent<MeshFilter>();
         GenerateTunnelMesh();
 
         RenderTunnelMesh();
@@ -60,24 +63,20 @@ public class GameObjectsController : MonoBehaviour {
 
     private void RenderTunnelMesh()
     {
-        GenerateTunnelMesh();
-        GameObject.Find("Transformar").GetComponent<MeshFilter>().mesh =
-            MeshGenerator.combineMeshes(_tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
+        StartCoroutine(GenerateTunnelMesh());
     }
 
     private void RenderEnemies()
     {
-        _enemiesController.DestroyEnemiesList();
-        _enemiesController.CreateEnemiesList();
+        StartCoroutine(_enemiesController.AutoGenerateEnemies());
     }
 
     private void RenderLights()
     {
-        _tunnelGenerator.DestroyTunnelLights();
-        _tunnelGenerator.CreateTunnelLights();
+        StartCoroutine(_tunnelGenerator.AutoGenerateTunnelLights());
     }
 
-    private void GenerateTunnelMesh()
+    private IEnumerator GenerateTunnelMesh()
     {
         _tunnelMeshList = new ArrayList();
         Debug.Log("Hexagons list capacity: " + _hexagonsList.Capacity);
@@ -92,7 +91,9 @@ public class GameObjectsController : MonoBehaviour {
                 _tunnelMeshList.Add(sideMesh);
             }
 
+            yield return null;
         }
+        _tunnelMeshFilter.mesh = MeshGenerator.combineMeshes(_tunnelMeshList.ToArray(typeof(Mesh)) as Mesh[]);
     }
 
     private int GetCurrentPlayerTunnelPosition()
