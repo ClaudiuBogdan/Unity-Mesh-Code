@@ -11,16 +11,20 @@ public class GameObjectsRender : MonoBehaviour {
     private ArrayList _lightObjectsList;
     //Reference to the tunnel enemies
     private ArrayList _enemiesList;
-    //Reference to the player
-    private GameObject _playerControllerReference;
     //Reference to the tunnel mesh list
     private ArrayList _tunnelMeshList;
+    //Reference to the player controller
+    private CharacterControllerHex _playerController;
+    //Current player position
+    private int _playerTunnelPosition;
+
 
 	// Use this for initialization
 	void Start () {
         //init variables
 	    _hexagonsList = GameObject.Find("ScriptContainer").GetComponent<TunnelGenerator>().tunnelHexagonsList;
-	    GenerateTunnelMesh();
+        _playerController = GameObject.Find("ScriptContainer").GetComponent<CharacterControllerHex>();
+        GenerateTunnelMesh();
 
         RenderTunnelMesh();
 
@@ -28,7 +32,11 @@ public class GameObjectsRender : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+	    if (_playerTunnelPosition < GetCurrentPlayerTunnelPosition())
+	    {
+	        _playerTunnelPosition = GetCurrentPlayerTunnelPosition();
+            Debug.Log("Current player position: " + _playerTunnelPosition);
+	    }
 	}
 
     private void RenderTunnelMesh()
@@ -61,5 +69,10 @@ public class GameObjectsRender : MonoBehaviour {
             }
 
         }
+    }
+
+    private int GetCurrentPlayerTunnelPosition()
+    {
+        return _playerController.getPlayerPlane().firstHexagonIndex;
     }
 }

@@ -230,5 +230,10 @@ namespace Assets.Script
             Vector3 distanceToEndTransition =  Vector3.Cross(cameraAngles.normalized, tunnelDirection.normalized);
             return distanceToEndTransition.magnitude > 0.1f;
         }
+
+        public Plane getPlayerPlane()
+        {
+            return this.playerPlane;
+        }
     }
 }
