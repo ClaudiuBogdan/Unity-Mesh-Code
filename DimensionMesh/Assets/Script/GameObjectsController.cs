@@ -81,8 +81,9 @@ public class GameObjectsController : MonoBehaviour {
     {
         _tunnelMeshList = new ArrayList();
         Debug.Log("Hexagons list capacity: " + _hexagonsList.Capacity);
+        int startSectionIndex = _playerTunnelPosition > 0 ? _playerTunnelPosition - 1 : 0;
         int tunnelSectionsToGenerate = 2;
-        for (int i = _playerTunnelPosition; i < _playerTunnelPosition + tunnelSectionsToGenerate; i++)
+        for (int i = startSectionIndex; i < _playerTunnelPosition + tunnelSectionsToGenerate; i++)
         {
             Hexagon lastHexagon = _hexagonsList[i] as Hexagon;
             Hexagon nextHexagon = _hexagonsList[i + 1] as Hexagon;
