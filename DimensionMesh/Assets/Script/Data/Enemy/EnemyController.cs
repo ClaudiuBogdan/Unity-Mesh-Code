@@ -34,15 +34,18 @@ public class EnemyController : MonoBehaviour
 
     public IEnumerator CreateEnemiesList()
     {
-        ArrayList enemyPositionList = _tunnelGenerator.GetEnemyPositionList(_currentTunnelIndex);
-        Debug.Log("Enemy position list size: " + enemyPositionList.Count);
+        ArrayList[] generatedPositionEnemies = _tunnelGenerator.GetEnemyPositionList(_currentTunnelIndex);
+        ArrayList enemyPositionList = generatedPositionEnemies[0];
+        ArrayList enemyRotationList = generatedPositionEnemies[1];
+        //Debug.Log("Enemy position list size: " + enemyPositionList.Count);
+
         int increment = 1;
         for (int i = 5; i < enemyPositionList.Count - increment; i = i + increment)
         {
             Enemy enemyUnit = new Enemy(Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity));
-            Transform enemyTransform = new RectTransform();
-            Debug.Log("Enemy index: " + i + " count: " + enemyPositionList.Count);
+            //Debug.Log("Enemy index: " + i + " count: " + enemyPositionList.Count);
             enemyUnit.SetPosition(enemyPositionList[i] is Vector3 ? (Vector3)enemyPositionList[i] : new Vector3());
+            enemyUnit.SetRotation(enemyRotationList[i] is Quaternion ? (Quaternion) enemyRotationList[i] : Quaternion.identity);
 
             _enemyUnitList.Add(enemyUnit);
             yield return null;

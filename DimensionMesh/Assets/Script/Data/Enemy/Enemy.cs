@@ -32,6 +32,11 @@ namespace Assets.Script.Data.Enemy
             this._enemyReference.transform.position = enemyPosition;
         }
 
+        public void SetRotation(Quaternion playerRotation)
+        {
+            this._enemyReference.transform.rotation = playerRotation;
+        }
+
         public GameObject GetEnemyReference()
         {
             return _enemyReference;

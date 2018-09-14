@@ -90,10 +90,11 @@ namespace Assets.Script
 
         
 
-        public ArrayList GetEnemyPositionList(int playerTunnelPosition)
+        public ArrayList[] GetEnemyPositionList(int playerTunnelPosition)
         {
             Tunnel tunnelToken = new Tunnel();
             ArrayList enemyPositionList = new ArrayList();
+            ArrayList enemyRotationList = new ArrayList();
 
             int indexFirstPlane = Random.Range(0, 5);
             int indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
@@ -107,22 +108,24 @@ namespace Assets.Script
             int enemiesPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude / 2) + 1;
             for (int lightIndex = 1; lightIndex <= enemiesPerTunnel; lightIndex++)
             {
-                Vector3 enemyPosition = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f / (enemiesPerTunnel + 1), Random.Range(0.0f, 1.0f), -0.2f));
+                Vector3 enemyPosition = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f / (enemiesPerTunnel + 1), Random.Range(0.3f, 0.7f), -0.5f));
 
                 enemyPositionList.Add(enemyPosition);
-                //enemyPositionList.Add(enemyRotation);
+                enemyRotationList.Add(enemyRotation);
 
-                indexFirstPlane = Random.Range(0, 5);
+                indexFirstPlane = Random.Range(0, 6);
                 indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
                 tunnelToken.SetAllTunnelPlanes(tunnelHexagonsList, playerTunnelPosition);
                 firstNormal = (tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).planeNormal;
                 secondNormal = (tunnelToken.TunnelPlanesList[indexSecondPlane] as Plane).planeNormal;
                 enemyNormal = (-firstNormal).normalized;
                 enemyRotation = new Quaternion();
+                enemyRotation.SetLookRotation(enemyNormal, Vector3.Cross(enemyNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.secondHexagon.centerHexagon));
                 referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
             }
             //Debug.Log("Enemy initial list capacity: " + +enemyPositionList.Capacity);
-            return enemyPositionList;
+
+            return new ArrayList[]{ enemyPositionList, enemyRotationList};
         }
 
         public void SetCurrentTunnelPosition(int playerTunnelPosition)
