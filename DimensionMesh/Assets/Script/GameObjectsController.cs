@@ -34,6 +34,9 @@ public class GameObjectsController : MonoBehaviour {
         GenerateTunnelMesh();
 
         RenderTunnelMesh();
+        Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
+	    GameObject.Find("MainCamera").GetComponent<Camera>().aspect = 16f / 9f;
+
 
 	}
 	
