@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour
             //Debug.Log("Enemy position list size: " + enemyPositionList.Count);
 
             int maxEnemyLoaded = 40;
-            int enemyToBeLoaded = _lastEnemyIndex + maxEnemyLoaded < enemyPositionList.Count ? maxEnemyLoaded - _enemyUnitList.Count : enemyPositionList.Count - _lastEnemyIndex;
+            int enemyToBeLoaded =maxEnemyLoaded - _enemyUnitList.Count;
             for (int i = 0; i < enemyToBeLoaded; i = i + 1)
             {
                 Enemy enemyUnit = new Enemy(Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity));
@@ -61,6 +61,10 @@ public class EnemyController : MonoBehaviour
                     enemyUnit.SetPosition(enemyPositionList[_lastEnemyIndex] is Vector3 ? (Vector3)enemyPositionList[_lastEnemyIndex] : new Vector3());
                     enemyUnit.SetRotation(enemyRotationList[_lastEnemyIndex] is Quaternion ? (Quaternion)enemyRotationList[_lastEnemyIndex] : Quaternion.identity);
                     _enemyUnitList.Enqueue(enemyUnit);
+                }
+                else
+                {
+                    return;
                 }
                 _lastEnemyIndex++;
                
