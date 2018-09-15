@@ -95,6 +95,7 @@ namespace Assets.Script
             Tunnel tunnelToken = new Tunnel();
             ArrayList enemyPositionList = new ArrayList();
             ArrayList enemyRotationList = new ArrayList();
+            ArrayList enemyPlaneList = new ArrayList();
 
             int indexFirstPlane = Random.Range(0, 5);
             int indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
@@ -112,6 +113,7 @@ namespace Assets.Script
 
                 enemyPositionList.Add(enemyPosition);
                 enemyRotationList.Add(enemyRotation);
+                enemyPlaneList.Add(referencePlane);
 
                 indexFirstPlane = Random.Range(0, 6);
                 indexSecondPlane = indexFirstPlane < 5 ? indexFirstPlane + 1 : 0;
@@ -125,7 +127,7 @@ namespace Assets.Script
             }
             //Debug.Log("Enemy initial list capacity: " + +enemyPositionList.Capacity);
 
-            return new ArrayList[]{ enemyPositionList, enemyRotationList};
+            return new ArrayList[]{ enemyPositionList, enemyRotationList, enemyPlaneList};
         }
 
         public void SetCurrentTunnelPosition(int playerTunnelPosition)

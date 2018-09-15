@@ -48,14 +48,19 @@ public class GameObjectsController : MonoBehaviour {
 	        UpdateControllersCurrentPosition(_playerTunnelPosition);
             //Deactivate last assets
             //List with game objects that will be deactivated
-	        RenderEnemies();
+	        
             RenderLights();
             RenderTunnelMesh();
             //Activate next assets
             //List with game objects that will be activated
 
             Debug.Log("Current player position: " + _playerTunnelPosition);
-	    }
+        }
+        else
+	    {
+	        RenderEnemies();
+        }
+	    
 	}
 
     private void UpdateControllersCurrentPosition(int playerTunnelPosition)
@@ -71,7 +76,9 @@ public class GameObjectsController : MonoBehaviour {
 
     private void RenderEnemies()
     {
-        StartCoroutine(_enemiesController.AutoGenerateEnemies());
+        _enemiesController.setPlayerAdvancePosition(_playerController.getPlayerAdvencePosition());
+        StartCoroutine(_enemiesController.CreateEnemiesList());
+        StartCoroutine(_enemiesController.DestroyEnemiesList());
     }
 
     private void RenderLights()

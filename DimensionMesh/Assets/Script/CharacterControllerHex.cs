@@ -235,5 +235,12 @@ namespace Assets.Script
         {
             return this.playerPlane;
         }
+
+        public float getPlayerAdvencePosition()
+        {
+            Vector3 playerGlobalCoordPosition = playerObject.transform.position;
+            Vector3 playerLocalCoordPosition = playerPlane.CalculateCoordinateLocalBase(playerGlobalCoordPosition);
+            return playerLocalCoordPosition.x;
+        }
     }
 }
