@@ -48,7 +48,10 @@ public class EnemyController : MonoBehaviour
             enemyUnit.SetRotation(enemyRotationList[i] is Quaternion ? (Quaternion) enemyRotationList[i] : Quaternion.identity);
 
             _enemyUnitList.Add(enemyUnit);
-            yield return null;
+            if (i % 5 == 0)
+            {
+                yield return null;
+            }
         }
     }
 
@@ -69,7 +72,11 @@ public class EnemyController : MonoBehaviour
         {
             Enemy enemy = _enemyUnitList[i] as Enemy;
             Destroy(enemy.GetEnemyReference());
-            yield return null;
+            if (i % 5 == 0)
+            {
+                yield return null;
+            }
+            
         }
         _enemyUnitList = new ArrayList();
         StartCoroutine(CreateEnemiesList());
