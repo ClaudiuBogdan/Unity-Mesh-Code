@@ -41,17 +41,17 @@ public class EnemyController : MonoBehaviour
         enemyPositionList = generatedPositionEnemies[0];
         enemyRotationList = generatedPositionEnemies[1];
         _enemyPlaneReference = (generatedPositionEnemies[2] as ArrayList)[0] as Plane;
-        _enemyUnitList = new Queue<Enemy>();
+        DestroyAllEnemies();
     }
 
-    public IEnumerator CreateEnemiesList()
+    public void CreateEnemiesList()
     {
         if (_lastEnemyIndex < enemyPositionList.Count)
         {
             //Debug.Log("Enemy position list size: " + enemyPositionList.Count);
 
-            int maxEnemyLoaded = 20;
-            int enemyToBeLoaded = _lastEnemyIndex + maxEnemyLoaded < enemyPositionList.Count ? maxEnemyLoaded - _enemyUnitList.Count : enemyPositionList.Count - _lastEnemyIndex - 5;
+            int maxEnemyLoaded = 40;
+            int enemyToBeLoaded = _lastEnemyIndex + maxEnemyLoaded < enemyPositionList.Count ? maxEnemyLoaded - _enemyUnitList.Count : enemyPositionList.Count - _lastEnemyIndex;
             for (int i = 0; i < enemyToBeLoaded; i = i + 1)
             {
                 Enemy enemyUnit = new Enemy(Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity));
@@ -63,24 +63,19 @@ public class EnemyController : MonoBehaviour
                     _enemyUnitList.Enqueue(enemyUnit);
                 }
                 _lastEnemyIndex++;
-                
-                if (i % 5 == 0)
-                {
-                    yield return null;
-                }
+               
             }
         }
         
     }
 
-    public IEnumerator DestroyEnemiesList()
+    public void DestroyEnemiesList()
     {
         int differentialPlayerPosition = 4;
         if(GetEnemyAdvancePosition(_enemyUnitList.Peek()) < _playerAdvancePosition - differentialPlayerPosition)
         {
             Enemy enemy = _enemyUnitList.Dequeue();
             Destroy(enemy.GetEnemyReference());
-            yield return null;
         }
     }
 
@@ -116,7 +111,7 @@ public class EnemyController : MonoBehaviour
 
             }
             _enemyUnitList = new Queue<Enemy>();
-            StartCoroutine(CreateEnemiesList());
+            //StartCoroutine(CreateEnemiesList());
         }
     }
 

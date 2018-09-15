@@ -32,6 +32,7 @@ public class GameObjectsController : MonoBehaviour {
 	    _enemiesController = GameObject.Find("ScriptContainer").GetComponent<EnemyController>();
 	    _tunnelMeshFilter = GameObject.Find("Transformar").GetComponent<MeshFilter>();
         GenerateTunnelMesh();
+	    UpdateControllersCurrentPosition(_playerTunnelPosition);
 
         RenderTunnelMesh();
         Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
@@ -76,9 +77,10 @@ public class GameObjectsController : MonoBehaviour {
 
     private void RenderEnemies()
     {
+        
+        _enemiesController.CreateEnemiesList();
+        _enemiesController.DestroyEnemiesList();
         _enemiesController.setPlayerAdvancePosition(_playerController.getPlayerAdvencePosition());
-        StartCoroutine(_enemiesController.CreateEnemiesList());
-        StartCoroutine(_enemiesController.DestroyEnemiesList());
     }
 
     private void RenderLights()
