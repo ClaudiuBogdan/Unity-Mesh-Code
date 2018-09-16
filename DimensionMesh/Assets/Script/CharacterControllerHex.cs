@@ -71,6 +71,7 @@ namespace Assets.Script
             float moveHorizontal = Input.GetAxis("Horizontal");
             Vector3 lateralMovement = Vector3.Cross(playerPlane.planeNormal, tunnelDirection).normalized * GetLateralFactor(moveHorizontal);
             playerObject.transform.position += lateralMovement;
+                
             //rigidBodyPlayer.AddForce(movement * lateralSpeed);
             //Detect plane change
             DetectPlaneChange();
@@ -241,6 +242,12 @@ namespace Assets.Script
             Vector3 playerGlobalCoordPosition = playerObject.transform.position;
             Vector3 playerLocalCoordPosition = playerPlane.CalculateCoordinateLocalBase(playerGlobalCoordPosition);
             return playerLocalCoordPosition.x;
+        }
+
+        public static Vector3 RotateVector(Vector3 vectorToRotate, float angles, Vector3 refVector)
+        {
+            return (Quaternion.AngleAxis(angles, refVector) *
+                    vectorToRotate);
         }
     }
 }

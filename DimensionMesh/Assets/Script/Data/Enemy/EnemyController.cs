@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         {
             //Debug.Log("Enemy position list size: " + enemyPositionList.Count);
 
-            int maxEnemyLoaded = 40;
+            int maxEnemyLoaded = 20;
             int enemyToBeLoaded =maxEnemyLoaded - _enemyUnitList.Count;
             for (int i = 0; i < enemyToBeLoaded; i = i + 1)
             {
@@ -76,7 +76,7 @@ public class EnemyController : MonoBehaviour
     public void DestroyEnemiesList()
     {
         int differentialPlayerPosition = 4;
-        if(GetEnemyAdvancePosition(_enemyUnitList.Peek()) < _playerAdvancePosition - differentialPlayerPosition)
+        if(_enemyUnitList.Count>0 && GetEnemyAdvancePosition(_enemyUnitList.Peek()) < _playerAdvancePosition - differentialPlayerPosition)
         {
             Enemy enemy = _enemyUnitList.Dequeue();
             Destroy(enemy.GetEnemyReference());

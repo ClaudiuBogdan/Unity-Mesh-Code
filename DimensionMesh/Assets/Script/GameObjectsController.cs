@@ -21,6 +21,8 @@ public class GameObjectsController : MonoBehaviour {
     private CharacterControllerHex _playerController;
     //Current player position
     private int _playerTunnelPosition;
+    //Refetence to the main camera;
+    private Camera _mainCamera;
 
 
 	// Use this for initialization
@@ -31,15 +33,17 @@ public class GameObjectsController : MonoBehaviour {
         _playerController = GameObject.Find("ScriptContainer").GetComponent<CharacterControllerHex>();
 	    _enemiesController = GameObject.Find("ScriptContainer").GetComponent<EnemyController>();
 	    _tunnelMeshFilter = GameObject.Find("Transformar").GetComponent<MeshFilter>();
+        _mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         GenerateTunnelMesh();
 	    UpdateControllersCurrentPosition(_playerTunnelPosition);
 
         RenderTunnelMesh();
         Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 	    GameObject.Find("MainCamera").GetComponent<Camera>().aspect = 16f / 9f;
+	    
 
 
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -60,9 +64,23 @@ public class GameObjectsController : MonoBehaviour {
         else
 	    {
 	        RenderEnemies();
-        }
+	        RenderSkybox();
+	    }
 	    
 	}
+
+    private void RenderSkybox()
+    {
+        int speedMltiplaier = 2;
+        //To set the speed, just multiply the Time.time with whatever amount you want.
+        RenderSettings.skybox.SetFloat("_Rotation", Time.time * -speedMltiplaier); 
+
+/*
+
+        float turnVal = Time.time;
+        Vector3 rotationValue = new Vector3(_mainCamera.transform.rotation.eulerAngles.x, _mainCamera.transform.rotation.eulerAngles.y + turnVal, _mainCamera.transform.rotation.eulerAngles.z);
+        RenderSettings.skybox.transform.rotation = Quaternion.Euler(rotationValue);*/
+    }
 
     private void UpdateControllersCurrentPosition(int playerTunnelPosition)
     {

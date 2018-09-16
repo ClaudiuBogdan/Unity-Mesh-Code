@@ -106,7 +106,7 @@ namespace Assets.Script
             Quaternion enemyRotation = new Quaternion();
             Plane referencePlane = tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane;
             enemyRotation.SetLookRotation(enemyNormal, referencePlane.firstHexagon.centerHexagon - referencePlane.firstHexagon.GetHexVerticesVector(0));
-            int enemiesPerTunnel = ((int)(tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude * 2) + 1;
+            int enemiesPerTunnel = (int)((tunnelToken.TunnelPlanesList[indexFirstPlane] as Plane).i.magnitude /5f) + 1;
             for (int lightIndex = 1; lightIndex <= enemiesPerTunnel; lightIndex++)
             {
                 Vector3 enemyPosition = referencePlane.CalculateGlobalPosition(new Vector3(lightIndex * 1.0f / (enemiesPerTunnel + 1), Random.Range(0.3f, 0.7f), -0.25f));
